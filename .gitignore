@@ -22,3 +22,9 @@ coverage/
 
 # uploads locais
 uploads/
+
+# prisma client gerado
+packages/db/src/client/
+
+# vercel
+.vercel/

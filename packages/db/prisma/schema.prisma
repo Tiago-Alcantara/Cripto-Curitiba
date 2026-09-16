@@ -1,0 +1,217 @@
+// Schema do Cripto Curitiba.
+// Nomes em ingles no banco e no codigo; portugues nas URLs e no JSON publico (ADR-0008).
+
+generator client {
+  provider       = "prisma-client"
+  output         = "../src/client"
+  runtime        = "nodejs"
+  moduleFormat   = "esm"
+}
+
+// A connection string fica em prisma.config.ts (exigencia do Prisma 7);
+// em runtime o cliente recebe um driver adapter (src/prisma.ts).
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------- Modulo: establishments ----------
+
+enum EstablishmentCategory {
+  RESTAURANT
+  CAFE
+  BAR
+  BAKERY
+  FAST_FOOD
+  MARKET
+  STORE
+  SERVICE
+  OTHER
+}
+
+enum PublicationStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum VerificationStatus {
+  VERIFIED
+  COMMUNITY_REPORTED
+  UNVERIFIED
+}
+
+enum PaymentMethod {
+  LIGHTNING
+  ONCHAIN
+  LIQUID
+  EVM
+  TRON
+  SOLANA
+  OTHER
+}
+
+enum Custody {
+  OWN_WALLET
+  PROCESSOR
+  EXCHANGE
+  UNKNOWN
+}
+
+model Establishment {
+  id          String                @id @default(cuid())
+  slug        String                @unique
+  name        String
+  description String?
+  category    EstablishmentCategory
+  priceRange  Int?
+
+  street       String?
+  number       String?
+  complement   String?
+  neighborhood String
+  city         String  @default("Curitiba")
+  state        String  @default("PR")
+  zipCode      String?
+  latitude     Float?
+  longitude    Float?
+
+  phone         String?
+  whatsapp      String?
+  email         String?
+  website       String?
+  instagram     String?
+  googleMapsUrl String?
+  menuUrl       String?
+
+  openingHours Json?
+
+  status             PublicationStatus  @default(DRAFT)
+  verificationStatus VerificationStatus @default(COMMUNITY_REPORTED)
+  verifiedAt         DateTime?
+  verifiedBy         String?
+  verificationNote   String?
+
+  acceptedPayments AcceptedPayment[]
+  photos           EstablishmentPhoto[]
+  suggestions      Suggestion[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, verificationStatus])
+  @@index([neighborhood])
+  @@index([category])
+  @@index([latitude, longitude])
+}
+
+model Crypto {
+  id        String  @id @default(cuid())
+  symbol    String  @unique
+  name      String
+  iconUrl   String?
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+
+  acceptedBy AcceptedPayment[]
+}
+
+model AcceptedPayment {
+  id              String @id @default(cuid())
+  establishmentId String
+  cryptoId        String
+
+  method  PaymentMethod
+  network String?
+  custody Custody       @default(UNKNOWN)
+  note    String?
+
+  lastConfirmedAt DateTime?
+
+  establishment Establishment @relation(fields: [establishmentId], references: [id], onDelete: Cascade)
+  crypto        Crypto        @relation(fields: [cryptoId], references: [id])
+
+  @@unique([establishmentId, cryptoId, method])
+  @@index([cryptoId])
+}
+
+model EstablishmentPhoto {
+  id              String  @id @default(cuid())
+  establishmentId String
+  url             String
+  alt             String?
+  isCover         Boolean @default(false)
+  sortOrder       Int     @default(0)
+
+  establishment Establishment @relation(fields: [establishmentId], references: [id], onDelete: Cascade)
+
+  @@index([establishmentId])
+}
+
+// ---------- Modulo: suggestions ----------
+
+enum SuggestionType {
+  NEW_PLACE
+  UPDATE
+  ERROR_REPORT
+}
+
+enum SuggestionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  SPAM
+}
+
+model Suggestion {
+  id              String           @id @default(cuid())
+  type            SuggestionType
+  status          SuggestionStatus @default(PENDING)
+  establishmentId String?
+  payload         Json
+  message         String?
+
+  submitterName  String?
+  submitterEmail String?
+  ipHash         String?
+  userAgent      String?
+
+  reviewedAt   DateTime?
+  reviewedById String?
+  reviewNote   String?
+
+  establishment Establishment? @relation(fields: [establishmentId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@index([status, createdAt])
+}
+
+// ---------- Modulo: auth/admin ----------
+
+enum AdminRole {
+  OWNER
+  EDITOR
+}
+
+model AdminUser {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  passwordHash String
+  role         AdminRole @default(EDITOR)
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  action    String
+  entity    String
+  entityId  String
+  diff      Json?
+  createdAt DateTime @default(now())
+
+  @@index([entity, entityId])
+}
