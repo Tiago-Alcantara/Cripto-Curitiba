@@ -1,6 +1,5 @@
 import type { Bairro, Cripto, Estabelecimento, ListaEstabelecimentos } from '@cripto/shared';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3333/api/v1';
+import { API_URL } from './env';
 
 /** Tags de cache do ISR. A API invalida por elas ao publicar (ADR-0007). */
 export const TAG_ESTABELECIMENTOS = 'estabelecimentos';

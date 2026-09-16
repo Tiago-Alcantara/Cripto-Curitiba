@@ -1,7 +1,8 @@
 import { cookies } from 'next/headers';
+import { API_URL } from './env';
 
 export const COOKIE_ADMIN = process.env.ADMIN_COOKIE_NAME ?? 'cc_admin';
-export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3333/api/v1';
+export { API_URL } from './env';
 
 /**
  * O token do painel vive em cookie httpOnly na origem da Vercel e nunca chega
