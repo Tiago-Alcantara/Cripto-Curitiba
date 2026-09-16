@@ -13,10 +13,14 @@ const MapView = dynamic(() => import('./map-view').then((modulo) => modulo.MapVi
   ),
 });
 
-export function MapViewDinamico({
-  estabelecimentos,
-}: {
+type Props = {
   estabelecimentos: EstabelecimentoResumo[];
-}) {
-  return <MapView estabelecimentos={estabelecimentos} />;
+  altura?: string;
+  selecionadoId?: string | null;
+  aoSelecionar?: (id: string | null) => void;
+  enquadrarNosPins?: boolean;
+};
+
+export function MapViewDinamico(props: Props) {
+  return <MapView {...props} />;
 }

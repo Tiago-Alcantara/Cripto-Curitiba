@@ -69,6 +69,7 @@ Nada de produto ainda; é o que destrava todo o resto.
 
 - [x] `MapView` com clustering, carregado dinamicamente (`ssr: false`)
 - [x] Alternância lista/mapa na listagem, sincronizada com os filtros
+- [x] Página `/mapa` dedicada, com lista lateral sincronizada com os pins
 - [x] Mapa pequeno na página de detalhe + link "como chegar"
 - [x] `POST /sugestoes` com rate limit, honeypot e Turnstile
 - [x] `/sugerir` com os três tipos de sugestão

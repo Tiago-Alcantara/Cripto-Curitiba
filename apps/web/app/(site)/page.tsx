@@ -47,6 +47,12 @@ export default async function HomePage() {
             Ver todos os lugares
           </Link>
           <Link
+            href="/mapa"
+            className="rounded-control border border-border bg-surface px-5 py-2.5 font-medium hover:border-primary/40"
+          >
+            Ver no mapa
+          </Link>
+          <Link
             href="/sugerir"
             className="rounded-control border border-border bg-surface px-5 py-2.5 font-medium hover:border-primary/40"
           >
