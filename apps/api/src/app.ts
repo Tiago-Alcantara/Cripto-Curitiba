@@ -6,6 +6,7 @@ import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod
 import { type Env, loadEnv, parseCorsOrigins } from './env.js';
 import { cryptosRoutes } from './modules/cryptos/cryptos.routes.js';
 import { establishmentsRoutes } from './modules/establishments/establishments.routes.js';
+import { suggestionsRoutes } from './modules/suggestions/suggestions.routes.js';
 import { errorHandler } from './plugins/error-handler.js';
 import { prismaPlugin } from './plugins/prisma.js';
 
@@ -66,6 +67,7 @@ export async function buildApp(
     async (api) => {
       await api.register(establishmentsRoutes);
       await api.register(cryptosRoutes);
+      await api.register(suggestionsRoutes);
     },
     { prefix: '/api/v1' },
   );

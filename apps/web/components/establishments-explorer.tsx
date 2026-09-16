@@ -2,10 +2,11 @@
 
 import type { Bairro, Cripto, EstabelecimentoResumo } from '@cripto/shared';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { EmptyState } from '@/components/empty-state';
 import { EstablishmentCard } from '@/components/establishment-card';
 import { FILTROS_VAZIOS, FilterBar, type Filtros } from '@/components/filter-bar';
+import { MapViewDinamico } from '@/components/map-view-dinamico';
 
 type Props = {
   estabelecimentos: EstabelecimentoResumo[];
@@ -105,6 +106,8 @@ export function EstablishmentsExplorer({ estabelecimentos, bairros, criptos }: P
     });
   }, [estabelecimentos, filtros]);
 
+  const [visao, setVisao] = useState<'lista' | 'mapa'>('lista');
+
   return (
     <div className="space-y-6">
       <FilterBar
@@ -117,19 +120,44 @@ export function EstablishmentsExplorer({ estabelecimentos, bairros, criptos }: P
         total={filtrados.length}
       />
 
+      <div className="flex items-center justify-between gap-4">
+        <fieldset
+          className="inline-flex rounded-control border border-border bg-surface p-0.5"
+          aria-label="Forma de visualizar"
+        >
+          {(['lista', 'mapa'] as const).map((opcao) => (
+            <button
+              key={opcao}
+              type="button"
+              onClick={() => setVisao(opcao)}
+              aria-pressed={visao === opcao}
+              className={`rounded-[6px] px-3 py-1.5 text-sm capitalize transition-colors ${
+                visao === opcao ? 'bg-primary text-white' : 'text-muted hover:text-foreground'
+              }`}
+            >
+              {opcao}
+            </button>
+          ))}
+        </fieldset>
+      </div>
+
+      {visao === 'mapa' && filtrados.length > 0 ? (
+        <MapViewDinamico estabelecimentos={filtrados} />
+      ) : null}
+
       {filtrados.length === 0 ? (
         <EmptyState
           titulo="Nenhum lugar com esses filtros"
           descricao="Tente afrouxar os filtros. Se você conhece um lugar que deveria estar aqui, conta pra gente."
           acao={{ href: '/sugerir', texto: 'Sugerir um lugar' }}
         />
-      ) : (
+      ) : visao === 'lista' ? (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {filtrados.map((estabelecimento) => (
             <EstablishmentCard key={estabelecimento.id} estabelecimento={estabelecimento} />
           ))}
         </div>
-      )}
+      ) : null}
 
       {filtros !== FILTROS_VAZIOS && filtrados.length > 0 ? (
         <p className="text-center text-muted text-sm">

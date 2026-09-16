@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { MapViewDinamico } from '@/components/map-view-dinamico';
 import { VerificationBadge } from '@/components/verification-badge';
 import { buscarEstabelecimento, listarPublicados, tolerante } from '@/lib/api';
 import {
@@ -166,6 +167,29 @@ export default async function EstabelecimentoPage({ params }: Props) {
           </ul>
         )}
       </section>
+
+      {estabelecimento.latitude && estabelecimento.longitude ? (
+        <section className="mt-10">
+          <h2 className="mb-3 font-semibold text-xl">No mapa</h2>
+          <MapViewDinamico
+            estabelecimentos={[
+              {
+                id: estabelecimento.id,
+                slug: estabelecimento.slug,
+                nome: estabelecimento.nome,
+                categoria: estabelecimento.categoria,
+                bairro: estabelecimento.bairro,
+                latitude: estabelecimento.latitude,
+                longitude: estabelecimento.longitude,
+                fotoCapa: estabelecimento.fotoCapa,
+                faixaPreco: estabelecimento.faixaPreco,
+                verificacao: estabelecimento.verificacao,
+                pagamentos: estabelecimento.pagamentos,
+              },
+            ]}
+          />
+        </section>
+      ) : null}
 
       <section className="mt-10 grid gap-8 sm:grid-cols-2">
         <div>
