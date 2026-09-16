@@ -1,15 +1,22 @@
 import Link from 'next/link';
+import { ApiOffline } from '@/components/api-offline';
 import { EstablishmentCard } from '@/components/establishment-card';
-import { listarBairros, listarEstabelecimentos } from '@/lib/api';
+import { listarBairros, listarEstabelecimentos, tolerante } from '@/lib/api';
 
 export const revalidate = 3600;
 
 export default async function HomePage() {
+  // Build da Vercel e render de pagina nao podem quebrar porque a VPS piscou.
   const [verificados, todos, bairros] = await Promise.all([
-    listarEstabelecimentos({ verificacao: 'verificado', perPage: '6', ordenar: 'verificados' }),
-    listarEstabelecimentos({ perPage: '1' }),
-    listarBairros(),
+    tolerante(
+      listarEstabelecimentos({ verificacao: 'verificado', perPage: '6', ordenar: 'verificados' }),
+      null,
+    ),
+    tolerante(listarEstabelecimentos({ perPage: '1' }), null),
+    tolerante(listarBairros(), null),
   ]);
+
+  const dadosNoAr = todos !== null && bairros !== null;
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:py-16">
@@ -18,9 +25,18 @@ export default async function HomePage() {
           Onde gastar criptomoedas em Curitiba
         </h1>
         <p className="mt-4 text-lg text-muted">
-          {todos.meta.total} {todos.meta.total === 1 ? 'lugar mapeado' : 'lugares mapeados'} em{' '}
-          {bairros.length} {bairros.length === 1 ? 'bairro' : 'bairros'} — com a forma de pagamento
-          que cada um aceita e a data da última confirmação.
+          {dadosNoAr ? (
+            <>
+              {todos.meta.total} {todos.meta.total === 1 ? 'lugar mapeado' : 'lugares mapeados'} em{' '}
+              {bairros.length} {bairros.length === 1 ? 'bairro' : 'bairros'} — com a forma de
+              pagamento que cada um aceita e a data da última confirmação.
+            </>
+          ) : (
+            <>
+              O diretório dos lugares de Curitiba que aceitam criptomoedas, com a forma de pagamento
+              que cada um aceita e a data da última confirmação.
+            </>
+          )}
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3">
@@ -39,7 +55,13 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {verificados.data.length > 0 ? (
+      {!dadosNoAr ? (
+        <section className="mt-12">
+          <ApiOffline />
+        </section>
+      ) : null}
+
+      {verificados && verificados.data.length > 0 ? (
         <section className="mt-16">
           <div className="flex items-end justify-between gap-4">
             <div>
