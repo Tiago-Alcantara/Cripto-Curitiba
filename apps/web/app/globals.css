@@ -1,0 +1,43 @@
+@import 'tailwindcss';
+
+/*
+ * Tokens de docs/05-design.md: base neutra quente, acento verde pinheiro.
+ * Contraste conferido para AA (primary sobre background ~8:1, muted ~5:1).
+ */
+@theme {
+  --color-background: #fbfaf8;
+  --color-surface: #ffffff;
+  --color-border: #e7e3dc;
+  --color-foreground: #1a1a18;
+  --color-muted: #6b6862;
+  --color-primary: #0e5c43;
+  --color-primary-hover: #0a4635;
+  --color-verified: #0e5c43;
+  --color-community: #b4751a;
+  --color-danger: #9b2c2c;
+
+  --radius-card: 12px;
+  --radius-control: 8px;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-instrument-serif), Georgia, serif;
+}
+
+html {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background-color: color-mix(in srgb, var(--color-primary) 18%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}

@@ -52,15 +52,21 @@ export const metodoParaBanco = invert(metodosPagamento);
 export const custodiaParaBanco = invert(custodias);
 export const verificacaoParaBanco = invert(verificacoes);
 
-export const categoriaSchema = z.enum(Object.values(categorias) as [string, ...string[]]);
-export const metodoSchema = z.enum(Object.values(metodosPagamento) as [string, ...string[]]);
-export const custodiaSchema = z.enum(Object.values(custodias) as [string, ...string[]]);
-export const verificacaoSchema = z.enum(Object.values(verificacoes) as [string, ...string[]]);
-
 export type Categoria = (typeof categorias)[keyof typeof categorias];
 export type MetodoPagamento = (typeof metodosPagamento)[keyof typeof metodosPagamento];
 export type Custodia = (typeof custodias)[keyof typeof custodias];
 export type Verificacao = (typeof verificacoes)[keyof typeof verificacoes];
+
+// O cast preserva a uniao literal: sem ele o schema inferiria `string` e o
+// frontend perderia a checagem de tipo nos valores publicos.
+export const categoriaSchema = z.enum(Object.values(categorias) as [Categoria, ...Categoria[]]);
+export const metodoSchema = z.enum(
+  Object.values(metodosPagamento) as [MetodoPagamento, ...MetodoPagamento[]],
+);
+export const custodiaSchema = z.enum(Object.values(custodias) as [Custodia, ...Custodia[]]);
+export const verificacaoSchema = z.enum(
+  Object.values(verificacoes) as [Verificacao, ...Verificacao[]],
+);
 
 export const rotulos = {
   categoria: {
