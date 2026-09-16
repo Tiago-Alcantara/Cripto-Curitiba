@@ -12,7 +12,8 @@
       "!**/.next",
       "!**/dist",
       "!**/generated",
-      "!**/globals.css"
+      "!**/globals.css",
+      "!**/next-env.d.ts"
     ]
   },
   "formatter": {
@@ -26,7 +27,6 @@
     "rules": {
       "recommended": true,
       "style": {
-        "noNonNullAssertion": "warn",
         "useImportType": "error"
       },
       "suspicious": {
