@@ -10,8 +10,10 @@ overkill nesta fase ([ADR-0002](adr/0002-monolito-modular.md)).
 Usuário
   │  HTTPS
   ▼
-Vercel ── Next.js (App Router, SSR + ISR)
-  │  HTTPS  api.criptocuritiba.com.br
+Vercel ── Next.js  (https://cripto-curitiba.vercel.app)
+  │        ├── páginas públicas (SSR + ISR)
+  │        └── Route Handlers /api/*  →  BFF do painel admin
+  │  HTTPS  (server-to-server)   api.<host-da-vps>
   ▼
 VPS ── Caddy (TLS, proxy reverso, rate limit de borda)
         │  127.0.0.1:3333
@@ -25,6 +27,17 @@ VPS ── Caddy (TLS, proxy reverso, rate limit de borda)
 O Postgres escuta apenas em `localhost`. A única porta aberta na VPS é 443 (e 22
 com chave). O frontend nunca fala com o banco.
 
+**O frontend roda em domínio `*.vercel.app`** ([ADR-0009](adr/0009-dominio-vercel-app.md)).
+Duas consequências que atravessam a arquitetura inteira:
+
+1. O painel admin não pode usar cookie compartilhado entre front e API — `vercel.app`
+   está na Public Suffix List. O admin passa por um **BFF nos Route Handlers do
+   Next** ([ADR-0006](adr/0006-auth-admin.md)): o browser só fala com a origem da
+   Vercel, e o Next repassa o token para a API.
+2. A API ainda precisa de um **hostname próprio com TLS** — a página é servida em
+   HTTPS e o browser bloqueia chamada HTTP (mixed content). Não precisa ser um
+   domínio pago: um subdomínio DuckDNS gratuito resolve ([ADR-0009](adr/0009-dominio-vercel-app.md)).
+
 ## Monorepo
 
 pnpm workspaces. Turborepo é opcional e só entra se o tempo de build incomodar
@@ -36,8 +49,11 @@ cripto-curitiba/
 │   ├── web/                 # Next.js (Vercel)
 │   │   ├── app/
 │   │   │   ├── (site)/      # páginas públicas
-│   │   │   ├── admin/       # painel (client-side, atrás de login)
-│   │   │   └── api/revalidate/  # webhook de revalidação ISR
+│   │   │   ├── admin/       # painel, atrás de login
+│   │   │   ├── api/
+│   │   │   │   ├── admin/   # BFF: fala com a API Fastify, guarda o token (ADR-0006)
+│   │   │   │   └── revalidate/  # webhook de revalidação ISR
+│   │   │   └── middleware.ts    # protege /admin
 │   │   ├── components/
 │   │   └── lib/
 │   └── api/                 # Fastify (VPS)
@@ -87,7 +103,7 @@ renomeado quebra o build do frontend, não a produção.
 - **ISR** nas páginas de listagem e detalhe (`revalidate: 3600`). O dado muda
   raramente; a VPS quase não recebe tráfego de leitura.
 - **Revalidação sob demanda**: ao publicar/editar um estabelecimento, a API chama
-  `POST https://criptocuritiba.com.br/api/revalidate` com um secret e as tags
+  `POST https://cripto-curitiba.vercel.app/api/revalidate` com um secret e as tags
   afetadas (`estabelecimentos`, `estabelecimento:<slug>`). Conteúdo novo aparece
   em segundos, sem baixar o `revalidate`.
 - **Filtros client-side** na listagem: o MVP cabe inteiro em memória (dezenas a
@@ -101,8 +117,11 @@ renomeado quebra o build do frontend, não a produção.
 - `@fastify/helmet`, CORS restrito às origens conhecidas (produção + preview Vercel + localhost)
 - `@fastify/rate-limit` global e mais agressivo em `POST /sugestoes` e `POST /admin/auth/login`
 - Validação de entrada com Zod em toda rota; nada de `any` vindo do body
-- Admin: cookie `httpOnly` + `Secure` + `SameSite=Lax`, senha com Argon2id,
-  sem cadastro público ([ADR-0006](adr/0006-auth-admin.md))
+- Admin: token Bearer emitido pela API e guardado em cookie `httpOnly` + `Secure` +
+  `SameSite=Lax` **host-only na origem da Vercel**, gravado pelo BFF do Next; senha
+  com Argon2id; sem cadastro público ([ADR-0006](adr/0006-auth-admin.md))
+- CORS **sem credenciais**: nenhuma requisição autenticada sai do browser direto
+  para a API, então a API não precisa aceitar cookies de outra origem
 - Segredos só em `.env` na VPS e em Environment Variables da Vercel; `.env.example` versionado, `.env` nunca
 
 ## Observabilidade

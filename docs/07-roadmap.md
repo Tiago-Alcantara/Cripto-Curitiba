@@ -17,8 +17,8 @@ Nada de produto ainda; é o que destrava todo o resto.
 | 1 | Identidade visual (cores, tipografia, logo) | Paleta proposta em [05-design](05-design.md); precisa de aval |
 | 2 | Biblioteca de mapa | React Leaflet + CARTO Positron ([ADR-0005](adr/0005-mapa.md)) |
 | 3 | Idioma do código | Código/DB em inglês, URLs/UI em português ([ADR-0008](adr/0008-idioma-do-codigo.md)) |
-| 4 | Auth do admin | Sessão por cookie + Argon2, sem provider externo ([ADR-0006](adr/0006-auth-admin.md)) |
-| 5 | Domínio | Registrar `criptocuritiba.com.br` (verificar disponibilidade) |
+| 4 | Auth do admin | BFF no Next + token Bearer + Argon2 ([ADR-0006](adr/0006-auth-admin.md)) |
+| 5 | Hostname da API | Subdomínio DuckDNS gratuito, já que o site fica em `*.vercel.app` ([ADR-0009](adr/0009-dominio-vercel-app.md)) |
 
 **Entregáveis:**
 
@@ -80,8 +80,9 @@ Nada de produto ainda; é o que destrava todo o resto.
 
 ## Fase 4 — Painel admin  *(~1 semana)*
 
-- [ ] `POST /admin/auth/login|logout|me` + middleware de sessão + rate limit
-- [ ] `/admin` protegido, com login
+- [ ] `POST /admin/auth/login|logout|me` na API, com token Bearer, `preHandler` de auth e rate limit
+- [ ] BFF no Next: Route Handlers `app/api/admin/*` que guardam o token em cookie host-only e repassam como Bearer ([ADR-0006](adr/0006-auth-admin.md))
+- [ ] `/admin` protegido por `middleware.ts` (redireciona para o login sem cookie válido)
 - [ ] Lista + editor de estabelecimentos (incl. pagamentos aceitos e upload de fotos)
 - [ ] Ações de publicar / arquivar / marcar como verificado (com nota e data)
 - [ ] Fila de moderação de sugestões: aprovar (vira registro) / rejeitar / marcar spam
@@ -95,9 +96,9 @@ Nada de produto ainda; é o que destrava todo o resto.
 ## Fase 5 — Produção e lançamento  *(~1 semana)*
 
 - [ ] VPS preparada conforme [06-infra-e-deploy](06-infra-e-deploy.md)
-- [ ] Domínio + DNS + TLS via Caddy
+- [ ] Subdomínio DuckDNS apontando para a VPS (+ cron de atualização) e TLS via Caddy
 - [ ] Deploy do backend com PM2 + `migrate deploy` + smoke test
-- [ ] Frontend na Vercel com domínio próprio
+- [ ] Frontend na Vercel no domínio `*.vercel.app`, com `CORS_ORIGINS` cobrindo produção e previews
 - [ ] Backup diário configurado **e restore testado**
 - [ ] Monitor de uptime em `/health`
 - [ ] Analytics respeitando privacidade (Plausible/Umami ou Vercel Analytics)
@@ -119,7 +120,9 @@ Por ordem provável de valor:
 3. **Área do lojista** — o dono atualiza o próprio cadastro (com moderação)
 4. **Módulo de eventos** — primeiro teste real da arquitetura modular
 5. **Módulo de comunidades** — grupos, meetups, perfis
-6. Newsletter, modo escuro, PWA, outras cidades
+6. **Domínio próprio** — quando fizer sentido investir em SEO de marca; a migração
+   já está preparada (ADR-0009: paths estáveis, auth independente de domínio)
+7. Newsletter, modo escuro, PWA, outras cidades
 
 A regra: **nenhum módulo novo antes do diretório estar vivo, com dado atualizado e
 tráfego real.** A arquitetura está pronta para eles; o produto ainda não precisa.

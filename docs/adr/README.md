@@ -10,6 +10,7 @@ Decisão revista não é apagada — vira `Substituída por ADR-XXXX`.
 | [0003](0003-sem-docker.md) | Sem Docker; PM2 na VPS | Aceita |
 | [0004](0004-rest-versionado.md) | REST versionado, sem GraphQL | Aceita |
 | [0005](0005-mapa.md) | Leaflet + OpenStreetMap/CARTO | **Proposta** |
-| [0006](0006-auth-admin.md) | Sessão por cookie + Argon2 | **Proposta** |
+| [0006](0006-auth-admin.md) | Admin: BFF no Next + token Bearer + Argon2 | **Proposta** |
 | [0007](0007-isr-e-revalidacao.md) | ISR + revalidação sob demanda | Aceita |
 | [0008](0008-idioma-do-codigo.md) | Inglês no código, português nas URLs | **Proposta** |
+| [0009](0009-dominio-vercel-app.md) | Frontend em `*.vercel.app`; API em hostname DuckDNS | Aceita |

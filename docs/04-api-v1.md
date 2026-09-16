@@ -1,6 +1,6 @@
 # 04 — API REST v1
 
-Base: `https://api.criptocuritiba.com.br/api/v1`
+Base: `https://criptocuritiba-api.duckdns.org/api/v1`
 
 REST versionado por path. Sem GraphQL nesta fase ([ADR-0004](adr/0004-rest-versionado.md)).
 Payloads em JSON, `camelCase` nas chaves, caminhos públicos em português.
@@ -104,13 +104,18 @@ moderação.
 
 ## Admin (autenticado)
 
-Cookie de sessão `httpOnly` ([ADR-0006](adr/0006-auth-admin.md)). Toda rota exige sessão válida.
+Autenticação por **token Bearer**, não por cookie ([ADR-0006](adr/0006-auth-admin.md)):
+o browser nunca chama estas rotas direto. Quem chama é o BFF do Next (Route
+Handlers em `apps/web/app/api/admin/*`), que guarda o token em cookie `httpOnly`
+na própria origem da Vercel e o repassa em `Authorization: Bearer <token>`.
+
+Toda rota `/admin/*` exige o header; sem ele, `401`.
 
 | Método | Rota | Ação |
 |---|---|---|
-| `POST` | `/admin/auth/login` | e-mail + senha → cookie. Rate limit 5/15min por IP |
-| `POST` | `/admin/auth/logout` | invalida a sessão |
-| `GET` | `/admin/auth/me` | usuário atual |
+| `POST` | `/admin/auth/login` | e-mail + senha → `{ token, expiresAt, usuario }`. Rate limit 5/15min por IP |
+| `POST` | `/admin/auth/logout` | no-op no servidor (o BFF apaga o cookie); registrado no `AuditLog` |
+| `GET` | `/admin/auth/me` | usuário do token atual |
 | `GET` | `/admin/estabelecimentos` | lista incluindo `DRAFT`/`ARCHIVED`, com filtros |
 | `POST` | `/admin/estabelecimentos` | cria (slug gerado do nome, colisão → sufixo) |
 | `PATCH` | `/admin/estabelecimentos/:id` | edita |
@@ -129,9 +134,29 @@ Cookie de sessão `httpOnly` ([ADR-0006](adr/0006-auth-admin.md)). Toda rota exi
 Após publicar/editar/arquivar, a API chama o frontend:
 
 ```
-POST https://criptocuritiba.com.br/api/revalidate
+POST https://cripto-curitiba.vercel.app/api/revalidate
 x-revalidate-secret: <REVALIDATE_SECRET>
 { "tags": ["estabelecimentos", "estabelecimento:tartuferia-san-paulo"] }
+```
+
+A URL vem de `FRONTEND_URL` — sempre a **de produção**. Preview deployments da
+Vercel podem estar atrás de Deployment Protection e recusariam a chamada; não há
+motivo para revalidar preview.
+
+### Fluxo de login (BFF)
+
+```
+browser  ──POST /api/admin/session──────────►  Next Route Handler (Vercel)
+                                                     │  POST /api/v1/admin/auth/login
+                                                     ▼
+                                               Fastify (VPS) ──► { token, expiresAt }
+browser  ◄──Set-Cookie: cc_admin=<token>──────  Next
+           (httpOnly, Secure, SameSite=Lax, host-only)
+
+browser  ──POST /api/admin/estabelecimentos──►  Next lê o cookie
+                                                     │  Authorization: Bearer <token>
+                                                     ▼
+                                               Fastify (VPS)
 ```
 
 Falha na revalidação **não** falha a operação do admin: loga em nível `warn`; o
@@ -148,7 +173,7 @@ Falha na revalidação **não** falha a operação do admin: loga em nível `war
 ## Upload de fotos
 
 MVP: upload para o disco da VPS em `/var/www/criptocuritiba/uploads`, servido pelo
-Caddy em `https://api.criptocuritiba.com.br/uploads/*`, com conversão para WebP e
+Caddy em `https://criptocuritiba-api.duckdns.org/uploads/*`, com conversão para WebP e
 limite de 5 MB por arquivo (`@fastify/multipart`). Objeto externo (R2/S3) fica
 para quando houver volume — a URL já é armazenada como string absoluta, então a
 migração é só reescrever URLs.

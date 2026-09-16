@@ -29,7 +29,7 @@ AceitaBitcoin, Bitmapa) é a **curadoria local**: cada local carrega um selo de
 
 ## Stack
 
-- **Frontend:** Next.js (App Router) + TypeScript + Tailwind + shadcn/ui — deploy na Vercel
+- **Frontend:** Next.js (App Router) + TypeScript + Tailwind + shadcn/ui — deploy na Vercel, no domínio `*.vercel.app`
 - **Backend:** Node.js + Fastify + TypeScript — VPS própria, gerenciado por PM2
 - **Banco:** PostgreSQL + Prisma — na mesma VPS, sem exposição pública
 - **Proxy/TLS:** Caddy
@@ -40,3 +40,7 @@ AceitaBitcoin, Bitmapa) é a **curadoria local**: cada local carrega um selo de
 Estão listadas em [docs/07-roadmap.md](docs/07-roadmap.md#fase-0--decisões-e-fundação)
 e têm recomendação registrada nos ADRs correspondentes. As três que travam o
 início do código: identidade visual, biblioteca de mapa e idioma do código.
+
+O frontend fica no domínio gratuito da Vercel — decisão com efeito direto na
+autenticação do admin e no hostname da API, detalhado em
+[ADR-0009](docs/adr/0009-dominio-vercel-app.md) e [ADR-0006](docs/adr/0006-auth-admin.md).

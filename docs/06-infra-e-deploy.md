@@ -16,13 +16,22 @@ Sem Docker por enquanto ([ADR-0003](adr/0003-sem-docker.md)).
 
 | Host | Aponta para |
 |---|---|
-| `criptocuritiba.com.br` | Vercel |
-| `www` | redirect 301 para o apex |
-| `api.criptocuritiba.com.br` | IP da VPS (A record) |
+| `cripto-curitiba.vercel.app` | Frontend (domínio gratuito da Vercel) |
+| `criptocuritiba-api.duckdns.org` | IP da VPS (A record no DuckDNS) |
 
-O frontend **precisa** rodar no domínio próprio (não em `*.vercel.app`) para que o
-cookie de sessão do admin funcione entre `criptocuritiba.com.br` e
-`api.criptocuritiba.com.br` com `SameSite=Lax`.
+O frontend usa o domínio da Vercel ([ADR-0009](adr/0009-dominio-vercel-app.md)). A
+API ainda precisa de hostname próprio: a página é HTTPS e o browser bloqueia
+chamada HTTP (mixed content), então é preciso certificado — e certificado precisa
+de nome. O subdomínio DuckDNS é gratuito e o Caddy emite o certificado por HTTP-01
+sem configuração extra.
+
+Setup do DuckDNS: criar o subdomínio, apontar para o IP da VPS e deixar um cron de
+atualização (`curl "https://www.duckdns.org/update?domains=...&token=..."`) a cada
+5 minutos, caso o IP da VPS não seja estático.
+
+A autenticação do admin **não depende do domínio** ([ADR-0006](adr/0006-auth-admin.md)):
+o token fica em cookie first-party na origem da Vercel, gravado pelo BFF do Next.
+Migrar para um domínio próprio depois é troca de variável de ambiente.
 
 ## Preparo da VPS (uma vez)
 
@@ -38,7 +47,7 @@ cookie de sessão do admin funcione entre `criptocuritiba.com.br` e
 ### Caddyfile
 
 ```
-api.criptocuritiba.com.br {
+criptocuritiba-api.duckdns.org {
     encode gzip zstd
 
     handle /uploads/* {
@@ -82,25 +91,31 @@ NODE_ENV=production
 PORT=3333
 HOST=127.0.0.1
 DATABASE_URL=postgresql://criptocuritiba:***@localhost:5432/criptocuritiba_prod
-SESSION_SECRET=            # 32+ bytes aleatórios
-COOKIE_DOMAIN=.criptocuritiba.com.br
-CORS_ORIGINS=https://criptocuritiba.com.br,http://localhost:3000
-FRONTEND_URL=https://criptocuritiba.com.br
+JWT_SECRET=            # 32+ bytes; trocar invalida todas as sessões
+JWT_EXPIRES_IN=7d
+CORS_ORIGINS=https://cripto-curitiba.vercel.app,http://localhost:3000
+FRONTEND_URL=https://cripto-curitiba.vercel.app   # alvo da revalidação ISR (sempre produção)
 REVALIDATE_SECRET=
 TURNSTILE_SECRET_KEY=
 UPLOADS_DIR=/var/www/criptocuritiba/uploads
-PUBLIC_UPLOADS_URL=https://api.criptocuritiba.com.br/uploads
+PUBLIC_UPLOADS_URL=https://criptocuritiba-api.duckdns.org/uploads
 ADMIN_SEED_PASSWORD=       # só no primeiro seed
 ```
 
 ### `apps/web/.env` (Vercel)
 
 ```
-NEXT_PUBLIC_API_URL=https://api.criptocuritiba.com.br/api/v1
-NEXT_PUBLIC_SITE_URL=https://criptocuritiba.com.br
+NEXT_PUBLIC_API_URL=https://criptocuritiba-api.duckdns.org/api/v1
+NEXT_PUBLIC_SITE_URL=https://cripto-curitiba.vercel.app
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=
 REVALIDATE_SECRET=
+ADMIN_COOKIE_NAME=cc_admin   # cookie host-only gravado pelo BFF (ADR-0006)
 ```
+
+`CORS_ORIGINS` precisa cobrir também os preview deployments, cuja URL muda a cada
+PR (`https://cripto-curitiba-*.vercel.app`) — usar match por regex no plugin de
+CORS, nunca `origin: true`. Nenhuma variável do admin é `NEXT_PUBLIC_*`: o token do
+painel só existe no lado servidor do Next.
 
 `.env.example` versionado em cada app; `.env` no `.gitignore` desde o primeiro commit.
 
@@ -150,3 +165,5 @@ Deploy do backend só entra na Fase 5; até lá, deploy manual por SSH é sufici
 | Banco não conecta | `systemctl status postgresql`, checar `DATABASE_URL` |
 | Disco cheio | logs do PM2 e uploads; conferir `pm2-logrotate` |
 | Site no ar com dado velho | revalidação falhou; `POST /api/revalidate` manual |
+| Admin dá 401 logo após o login | cookie não gravado: conferir `Secure`/`httpOnly` no Route Handler e se a chamada saiu da mesma origem da Vercel |
+| API inacessível pelo browser | conferir o certificado do hostname DuckDNS e se o registro ainda aponta para o IP atual da VPS |
