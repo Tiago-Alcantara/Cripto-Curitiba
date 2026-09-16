@@ -1,0 +1,24 @@
+# dependências
+node_modules/
+.pnpm-store/
+
+# build
+dist/
+build/
+.next/
+out/
+*.tsbuildinfo
+
+# ambiente
+.env
+.env.*
+!.env.example
+
+# logs e temporários
+*.log
+npm-debug.log*
+.DS_Store
+coverage/
+
+# uploads locais
+uploads/
