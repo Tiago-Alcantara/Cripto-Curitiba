@@ -4,9 +4,12 @@ import rateLimit from '@fastify/rate-limit';
 import Fastify, { type FastifyInstance } from 'fastify';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import { type Env, loadEnv, parseCorsOrigins } from './env.js';
+import { adminRoutes } from './modules/admin/admin.routes.js';
+import { authRoutes } from './modules/auth/auth.routes.js';
 import { cryptosRoutes } from './modules/cryptos/cryptos.routes.js';
 import { establishmentsRoutes } from './modules/establishments/establishments.routes.js';
 import { suggestionsRoutes } from './modules/suggestions/suggestions.routes.js';
+import { authPlugin } from './plugins/auth.js';
 import { errorHandler } from './plugins/error-handler.js';
 import { prismaPlugin } from './plugins/prisma.js';
 
@@ -55,6 +58,7 @@ export async function buildApp(
 
   await app.register(errorHandler);
   await app.register(prismaPlugin);
+  await app.register(authPlugin);
 
   app.get('/api/v1/health', async () => ({ status: 'ok', uptime: process.uptime() }));
 
@@ -68,6 +72,8 @@ export async function buildApp(
       await api.register(establishmentsRoutes);
       await api.register(cryptosRoutes);
       await api.register(suggestionsRoutes);
+      await api.register(authRoutes);
+      await api.register(adminRoutes);
     },
     { prefix: '/api/v1' },
   );
