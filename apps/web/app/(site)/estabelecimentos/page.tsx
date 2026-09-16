@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
+import { ApiOffline } from '@/components/api-offline';
 import { EstablishmentsExplorer } from '@/components/establishments-explorer';
-import { listarBairros, listarCriptomoedas, listarEstabelecimentos } from '@/lib/api';
+import { listarBairros, listarCriptomoedas, listarEstabelecimentos, tolerante } from '@/lib/api';
 
 export const revalidate = 3600;
 
@@ -13,9 +14,9 @@ export const metadata: Metadata = {
 
 export default async function EstabelecimentosPage() {
   const [lista, bairros, criptos] = await Promise.all([
-    listarEstabelecimentos({ perPage: '100' }),
-    listarBairros(),
-    listarCriptomoedas(),
+    tolerante(listarEstabelecimentos({ perPage: '100' }), null),
+    tolerante(listarBairros(), null),
+    tolerante(listarCriptomoedas(), null),
   ]);
 
   return (
@@ -28,9 +29,17 @@ export default async function EstabelecimentosPage() {
         </p>
       </header>
 
-      <Suspense fallback={<p className="text-muted">Carregando…</p>}>
-        <EstablishmentsExplorer estabelecimentos={lista.data} bairros={bairros} criptos={criptos} />
-      </Suspense>
+      {lista && bairros && criptos ? (
+        <Suspense fallback={<p className="text-muted">Carregando…</p>}>
+          <EstablishmentsExplorer
+            estabelecimentos={lista.data}
+            bairros={bairros}
+            criptos={criptos}
+          />
+        </Suspense>
+      ) : (
+        <ApiOffline />
+      )}
     </div>
   );
 }
