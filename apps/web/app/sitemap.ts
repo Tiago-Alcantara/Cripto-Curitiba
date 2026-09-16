@@ -1,7 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { listarPublicados, tolerante } from '@/lib/api';
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+import { SITE_URL as siteUrl } from '@/lib/env';
 
 export const revalidate = 3600;
 

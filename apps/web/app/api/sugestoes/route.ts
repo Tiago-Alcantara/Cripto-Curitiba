@@ -1,6 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3333/api/v1';
+import { API_URL } from '@/lib/env';
 
 /**
  * O formulario posta para a propria origem e o Next repassa para a API. Isso
