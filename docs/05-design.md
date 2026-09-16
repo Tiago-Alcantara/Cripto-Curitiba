@@ -59,6 +59,7 @@ servidos localmente — nunca hotlink de CDN de terceiros.
 |---|---|
 | `/` | Hero curto com busca, contador ("27 lugares em Curitiba"), destaques verificados, como funciona, CTA de sugestão |
 | `/estabelecimentos` | Filtros (bairro, categoria, cripto, método) + alternância lista/mapa; cards |
+| `/mapa` | Página dedicada: mapa grande + lista lateral sincronizada, filtro por cripto e por verificação |
 | `/estabelecimentos/[slug]` | Galeria, pagamentos aceitos detalhados, endereço + mapa pequeno, horário, contatos, selo + data, "reportar erro" |
 | `/sugerir` | Formulário de sugestão (novo/atualização/erro) |
 | `/sobre` | Projeto, critérios de verificação, contato, aviso de que o site não intermedia pagamentos |

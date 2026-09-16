@@ -17,6 +17,9 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
             <Link href="/estabelecimentos" className="text-muted hover:text-foreground">
               Onde gastar
             </Link>
+            <Link href="/mapa" className="text-muted hover:text-foreground">
+              Mapa
+            </Link>
             <Link href="/sobre" className="text-muted hover:text-foreground">
               Sobre
             </Link>
