@@ -11,8 +11,20 @@ AceitaBitcoin, Bitmapa) é a **curadoria local**: cada local carrega um selo de
 `verificado` (checado presencialmente/por contato direto) ou
 `reportado pela comunidade`.
 
-> **Status:** planejamento. Nenhum código ainda — esta branch contém apenas a
-> documentação de arquitetura, escopo e roadmap.
+> **Status:** fases 0 a 4 implementadas (monorepo, API, site público, mapa,
+> sugestões e painel admin). Falta a fase 5: subir na VPS e na Vercel, e a
+> curadoria dos estabelecimentos reais. Ver [docs/07-roadmap.md](docs/07-roadmap.md).
+
+## Rodar localmente
+
+Requisitos, comandos e convenções estão em [CONTRIBUTING.md](CONTRIBUTING.md).
+
+```bash
+pnpm install
+pnpm db:migrate
+ADMIN_SEED_PASSWORD=dev pnpm db:seed
+pnpm dev     # api em :3333, site em :3000
+```
 
 ## Documentação
 

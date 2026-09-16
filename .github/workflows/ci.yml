@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verificar:
+    name: Lint, tipos e testes
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: cripto
+          POSTGRES_PASSWORD: cripto
+          POSTGRES_DB: criptocuritiba_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://cripto:cripto@localhost:5432/criptocuritiba_test?schema=public
+      TEST_DATABASE_URL: postgresql://cripto:cripto@localhost:5432/criptocuritiba_test?schema=public
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Gerar o client do Prisma
+        run: pnpm db:generate
+
+      - name: Compilar pacotes compartilhados
+        run: pnpm --filter @cripto/db build && pnpm --filter @cripto/shared build
+
+      - run: pnpm lint
+
+      - run: pnpm typecheck
+
+      - run: pnpm test
+
+      - name: Build do frontend
+        run: pnpm --filter @cripto/web build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:3333/api/v1
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000

@@ -1,0 +1,157 @@
+[
+  {
+    "slug": "tartuferia-san-paulo",
+    "name": "Tartuferia San Paulo",
+    "description": "Bistro citado na pesquisa como um dos primeiros estabelecimentos de Curitiba a aceitar bitcoin. Cadastro pendente de curadoria: endereco, horario e formas de pagamento precisam ser confirmados antes de publicar.",
+    "category": "RESTAURANT",
+    "neighborhood": "Batel",
+    "status": "DRAFT",
+    "verificationStatus": "COMMUNITY_REPORTED",
+    "verificationNote": "Origem: pesquisa de mercado. Confirmar endereco, criptos aceitas e se ainda aceita antes de publicar.",
+    "payments": [{ "crypto": "BTC", "method": "ONCHAIN", "custody": "UNKNOWN" }]
+  },
+  {
+    "slug": "exemplo-cafe-do-largo",
+    "name": "Exemplo Cafe do Largo",
+    "description": "Registro ficticio de desenvolvimento. Cafeteria com pagamento em Lightning.",
+    "category": "CAFE",
+    "neighborhood": "Centro",
+    "street": "Rua Exemplo",
+    "number": "100",
+    "latitude": -25.4297,
+    "longitude": -49.2719,
+    "status": "PUBLISHED",
+    "verificationStatus": "VERIFIED",
+    "verifiedBy": "seed",
+    "priceRange": 2,
+    "openingHours": {
+      "mon": [{ "open": "08:00", "close": "18:00" }],
+      "tue": [{ "open": "08:00", "close": "18:00" }],
+      "wed": [{ "open": "08:00", "close": "18:00" }],
+      "thu": [{ "open": "08:00", "close": "18:00" }],
+      "fri": [{ "open": "08:00", "close": "20:00" }],
+      "sat": [{ "open": "09:00", "close": "14:00" }],
+      "sun": []
+    },
+    "payments": [
+      { "crypto": "BTC", "method": "LIGHTNING", "custody": "OWN_WALLET" },
+      { "crypto": "BTC", "method": "ONCHAIN", "custody": "OWN_WALLET" }
+    ]
+  },
+  {
+    "slug": "exemplo-bistro-batel",
+    "name": "Exemplo Bistro Batel",
+    "description": "Registro ficticio de desenvolvimento. Bistro que aceita stablecoins.",
+    "category": "RESTAURANT",
+    "neighborhood": "Batel",
+    "street": "Avenida Exemplo",
+    "number": "2000",
+    "latitude": -25.4431,
+    "longitude": -49.2908,
+    "status": "PUBLISHED",
+    "verificationStatus": "VERIFIED",
+    "verifiedBy": "seed",
+    "priceRange": 3,
+    "payments": [
+      { "crypto": "USDT", "method": "EVM", "network": "Polygon", "custody": "PROCESSOR" },
+      { "crypto": "BTC", "method": "LIGHTNING", "custody": "PROCESSOR" }
+    ]
+  },
+  {
+    "slug": "exemplo-bar-agua-verde",
+    "name": "Exemplo Bar Agua Verde",
+    "description": "Registro ficticio de desenvolvimento. Bar de bairro com carteira propria.",
+    "category": "BAR",
+    "neighborhood": "Agua Verde",
+    "latitude": -25.4581,
+    "longitude": -49.2872,
+    "status": "PUBLISHED",
+    "verificationStatus": "COMMUNITY_REPORTED",
+    "priceRange": 2,
+    "payments": [{ "crypto": "BTC", "method": "LIGHTNING", "custody": "OWN_WALLET" }]
+  },
+  {
+    "slug": "exemplo-padaria-santa-felicidade",
+    "name": "Exemplo Padaria Santa Felicidade",
+    "description": "Registro ficticio de desenvolvimento.",
+    "category": "BAKERY",
+    "neighborhood": "Santa Felicidade",
+    "latitude": -25.4053,
+    "longitude": -49.3315,
+    "status": "PUBLISHED",
+    "verificationStatus": "COMMUNITY_REPORTED",
+    "priceRange": 1,
+    "payments": [
+      { "crypto": "BTC", "method": "ONCHAIN", "custody": "EXCHANGE" },
+      { "crypto": "USDC", "method": "EVM", "network": "Base", "custody": "EXCHANGE" }
+    ]
+  },
+  {
+    "slug": "exemplo-mercado-portao",
+    "name": "Exemplo Mercado Portao",
+    "description": "Registro ficticio de desenvolvimento. Mercado de bairro.",
+    "category": "MARKET",
+    "neighborhood": "Portao",
+    "latitude": -25.4746,
+    "longitude": -49.3009,
+    "status": "PUBLISHED",
+    "verificationStatus": "VERIFIED",
+    "verifiedBy": "seed",
+    "priceRange": 2,
+    "payments": [{ "crypto": "USDT", "method": "TRON", "custody": "OWN_WALLET" }]
+  },
+  {
+    "slug": "exemplo-hamburgueria-cabral",
+    "name": "Exemplo Hamburgueria Cabral",
+    "description": "Registro ficticio de desenvolvimento.",
+    "category": "FAST_FOOD",
+    "neighborhood": "Cabral",
+    "latitude": -25.4083,
+    "longitude": -49.2617,
+    "status": "PUBLISHED",
+    "verificationStatus": "COMMUNITY_REPORTED",
+    "priceRange": 2,
+    "payments": [{ "crypto": "BTC", "method": "LIGHTNING", "custody": "PROCESSOR" }]
+  },
+  {
+    "slug": "exemplo-loja-reboucas",
+    "name": "Exemplo Loja Reboucas",
+    "description": "Registro ficticio de desenvolvimento. Loja de bicicletas.",
+    "category": "STORE",
+    "neighborhood": "Reboucas",
+    "latitude": -25.4444,
+    "longitude": -49.2647,
+    "status": "PUBLISHED",
+    "verificationStatus": "VERIFIED",
+    "verifiedBy": "seed",
+    "priceRange": 3,
+    "payments": [
+      { "crypto": "BTC", "method": "ONCHAIN", "custody": "OWN_WALLET" },
+      { "crypto": "ETH", "method": "EVM", "network": "Arbitrum", "custody": "OWN_WALLET" }
+    ]
+  },
+  {
+    "slug": "exemplo-cafe-juveve",
+    "name": "Exemplo Cafe Juveve",
+    "description": "Registro ficticio de desenvolvimento. Cadastro em rascunho.",
+    "category": "CAFE",
+    "neighborhood": "Juveve",
+    "latitude": -25.4142,
+    "longitude": -49.2545,
+    "status": "DRAFT",
+    "verificationStatus": "UNVERIFIED",
+    "payments": [{ "crypto": "BTC", "method": "LIGHTNING", "custody": "UNKNOWN" }]
+  },
+  {
+    "slug": "exemplo-restaurante-arquivado",
+    "name": "Exemplo Restaurante Arquivado",
+    "description": "Registro ficticio de desenvolvimento. Parou de aceitar cripto.",
+    "category": "RESTAURANT",
+    "neighborhood": "Centro",
+    "latitude": -25.4325,
+    "longitude": -49.2681,
+    "status": "ARCHIVED",
+    "verificationStatus": "COMMUNITY_REPORTED",
+    "payments": []
+  }
+]

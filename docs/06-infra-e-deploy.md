@@ -123,25 +123,24 @@ painel só existe no lado servidor do Next.
 
 **Frontend:** push na `main` → build automático na Vercel. Preview por PR.
 
-**Backend:** script `scripts/deploy.sh` executado por SSH:
+**Backend:** script [`deploy/deploy.sh`](../deploy/deploy.sh) executado por SSH:
 
 ```bash
-set -euo pipefail
-cd /home/deploy/cripto-curitiba
-git pull --ff-only origin main
-pnpm install --frozen-lockfile
-pnpm --filter @cripto/db prisma migrate deploy
-pnpm --filter @cripto/api build
-pm2 reload criptocuritiba-api --update-env
+ssh deploy@<vps> 'cd ~/cripto-curitiba && ./deploy/deploy.sh'
 ```
 
-CI (GitHub Actions):
+O script atualiza o código, instala dependências, aplica migrations, compila e
+recarrega o PM2, conferindo `/health` no fim.
 
-- **em PR:** `lint`, `typecheck`, `test`, `build` dos dois apps
-- **em push na `main`:** o job acima + deploy do backend via SSH
-  (`appleboy/ssh-action` com `SSH_KEY`/`SSH_HOST`/`SSH_USER` em secrets)
+CI (GitHub Actions), já no repositório:
 
-Deploy do backend só entra na Fase 5; até lá, deploy manual por SSH é suficiente.
+- [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) — em PR e na `main`:
+  lint, typecheck, testes contra um Postgres de serviço e build do frontend
+- [`.github/workflows/deploy-api.yml`](../.github/workflows/deploy-api.yml) — na
+  `main`, deploy do backend por SSH e checagem de `/health` depois
+
+Os segredos necessários estão em [deploy/README.md](../deploy/README.md#segredos-do-github-actions).
+Sem eles, o deploy continua manual por SSH.
 
 ## Backups
 
@@ -151,8 +150,10 @@ Deploy do backend só entra na Fase 5; até lá, deploy manual por SSH é sufici
   na mesma máquina que o banco
 - **Restore testado uma vez antes do lançamento.** Backup não testado não é backup.
 
+Use [`deploy/backup.sh`](../deploy/backup.sh):
+
 ```bash
-0 3 * * * pg_dump -Fc criptocuritiba_prod | gzip > /var/backups/postgres/$(date +\%F).dump.gz
+0 3 * * * /home/deploy/cripto-curitiba/deploy/backup.sh >> /var/log/backup-criptocuritiba.log 2>&1
 ```
 
 ## Runbook rápido

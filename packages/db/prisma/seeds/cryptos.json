@@ -1,0 +1,8 @@
+[
+  { "symbol": "BTC", "name": "Bitcoin", "sortOrder": 1 },
+  { "symbol": "USDT", "name": "Tether", "sortOrder": 2 },
+  { "symbol": "USDC", "name": "USD Coin", "sortOrder": 3 },
+  { "symbol": "ETH", "name": "Ethereum", "sortOrder": 4 },
+  { "symbol": "SOL", "name": "Solana", "sortOrder": 5 },
+  { "symbol": "DEPIX", "name": "Depix", "sortOrder": 6 }
+]

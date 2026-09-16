@@ -1,0 +1,30 @@
+# Proxy reverso e TLS automatico da API.
+# Copiar para /etc/caddy/Caddyfile e ajustar o hostname.
+#
+# O hostname precisa existir de verdade (ADR-0009): subdominio DuckDNS
+# gratuito ou api.<seu-dominio>.
+
+criptocuritiba-api.duckdns.org {
+    encode gzip zstd
+
+    # Fotos dos estabelecimentos, gravadas em disco pela API.
+    handle /uploads/* {
+        root * /var/www/criptocuritiba
+        file_server
+        header Cache-Control "public, max-age=31536000, immutable"
+    }
+
+    handle {
+        reverse_proxy 127.0.0.1:3333
+    }
+
+    header {
+        -Server
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    }
+
+    log {
+        output file /var/log/caddy/criptocuritiba-api.log
+        format json
+    }
+}

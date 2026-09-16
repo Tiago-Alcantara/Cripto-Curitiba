@@ -1,0 +1,71 @@
+import { cookies } from 'next/headers';
+
+export const COOKIE_ADMIN = process.env.ADMIN_COOKIE_NAME ?? 'cc_admin';
+export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3333/api/v1';
+
+/**
+ * O token do painel vive em cookie httpOnly na origem da Vercel e nunca chega
+ * ao JavaScript da pagina (ADR-0006). Todo acesso a API passa por aqui.
+ */
+export async function lerToken(): Promise<string | null> {
+  const jar = await cookies();
+  return jar.get(COOKIE_ADMIN)?.value ?? null;
+}
+
+export function opcoesCookie(maxAge: number) {
+  return {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax' as const,
+    path: '/',
+    maxAge,
+  };
+}
+
+export type RespostaApi<T> =
+  | { ok: true; dados: T }
+  | { ok: false; status: number; mensagem: string };
+
+/** Chamada autenticada a API, feita sempre do servidor. */
+export async function chamarApi<T>(
+  caminho: string,
+  init: RequestInit = {},
+): Promise<RespostaApi<T>> {
+  const token = await lerToken();
+
+  if (!token) {
+    return { ok: false, status: 401, mensagem: 'Sessão expirada' };
+  }
+
+  try {
+    // content-type so quando ha corpo: o Fastify recusa POST com
+    // "application/json" e corpo vazio, e acoes como publicar nao tem corpo.
+    const temCorpo = init.body !== undefined && init.body !== null && init.body !== '';
+
+    const resposta = await fetch(`${API_URL}${caminho}`, {
+      ...init,
+      body: temCorpo ? init.body : undefined,
+      headers: {
+        ...init.headers,
+        ...(temCorpo ? { 'content-type': 'application/json' } : {}),
+        authorization: `Bearer ${token}`,
+      },
+      cache: 'no-store',
+    });
+
+    const corpo = await resposta.json().catch(() => null);
+
+    if (!resposta.ok) {
+      const erro = corpo as { error?: { message?: string } } | null;
+      return {
+        ok: false,
+        status: resposta.status,
+        mensagem: erro?.error?.message ?? 'Falha na operação',
+      };
+    }
+
+    return { ok: true, dados: corpo as T };
+  } catch {
+    return { ok: false, status: 502, mensagem: 'API indisponível' };
+  }
+}

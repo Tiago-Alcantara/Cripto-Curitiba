@@ -1,0 +1,34 @@
+{
+  "name": "cripto-curitiba",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --parallel --filter \"./apps/*\" dev",
+    "build": "pnpm --filter @cripto/db build && pnpm --filter @cripto/shared build && pnpm --filter \"./apps/*\" build",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "db:generate": "pnpm --filter @cripto/db generate",
+    "db:migrate": "pnpm --filter @cripto/db migrate",
+    "db:seed": "pnpm --filter @cripto/db seed",
+    "db:studio": "pnpm --filter @cripto/db studio"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.14",
+    "typescript": "5.9.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/engines",
+      "prisma",
+      "esbuild",
+      "sharp",
+      "@node-rs/argon2"
+    ]
+  }
+}
