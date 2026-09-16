@@ -1,6 +1,6 @@
 'use client';
 
-export default function Error({ reset }: { error: Error; reset: () => void }) {
+export default function ErrorBoundary({ reset }: { error: Error; reset: () => void }) {
   return (
     <div className="mx-auto max-w-xl px-4 py-24 text-center">
       <h1 className="font-display text-3xl">Algo deu errado</h1>

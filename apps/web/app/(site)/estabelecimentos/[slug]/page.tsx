@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { CryptoChip } from '@/components/crypto-chip';
 import { VerificationBadge } from '@/components/verification-badge';
 import { buscarEstabelecimento, listarPublicados, tolerante } from '@/lib/api';
 import {
@@ -89,11 +88,10 @@ export default async function EstabelecimentoPage({ params }: Props) {
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-10">
-      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD e conteudo proprio, serializado */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      {/* JSON-LD para o Google entender o local; conteudo proprio, serializado. */}
+      <script type="application/ld+json" suppressHydrationWarning>
+        {JSON.stringify(jsonLd)}
+      </script>
 
       <nav className="mb-6 text-muted text-sm">
         <Link href="/estabelecimentos" className="hover:text-foreground">
