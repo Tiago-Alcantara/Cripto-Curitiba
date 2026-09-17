@@ -1,0 +1,23 @@
+# Nunca entram na imagem
+node_modules
+**/node_modules
+.git
+.github
+
+# Artefatos de build (a imagem compila do zero)
+**/dist
+**/.next
+**/.turbo
+packages/db/src/client
+
+# Segredos e coisas locais
+**/.env
+**/.env.*
+!**/.env.example
+*.log
+coverage
+uploads
+
+# Nao fazem parte da API
+docs
+deploy

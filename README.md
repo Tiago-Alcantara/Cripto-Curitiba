@@ -35,16 +35,17 @@ pnpm dev     # api em :3333, site em :3000
 | [docs/03-modelo-de-dados.md](docs/03-modelo-de-dados.md) | Entidades e rascunho do `schema.prisma` |
 | [docs/04-api-v1.md](docs/04-api-v1.md) | Contrato REST `/api/v1`, filtros, erros, rate limit |
 | [docs/05-design.md](docs/05-design.md) | Direção visual, tokens, componentes, páginas, acessibilidade |
-| [docs/06-infra-e-deploy.md](docs/06-infra-e-deploy.md) | VPS, Caddy, PM2, Postgres, backups, CI/CD, env vars |
+| [docs/06-infra-e-deploy.md](docs/06-infra-e-deploy.md) | Caminho manual (VPS, Caddy, PM2), mantido como alternativa |
+| [docs/08-deploy-coolify.md](docs/08-deploy-coolify.md) | **Deploy em uso:** API e Postgres no Coolify, frontend na Vercel |
 | [docs/07-roadmap.md](docs/07-roadmap.md) | Fases do MVP, entregáveis e checklists |
 | [docs/adr/](docs/adr/) | Decisões arquiteturais registradas (ADRs) |
 
 ## Stack
 
 - **Frontend:** Next.js (App Router) + TypeScript + Tailwind + shadcn/ui — deploy na Vercel, no domínio `*.vercel.app`
-- **Backend:** Node.js + Fastify + TypeScript — VPS própria, gerenciado por PM2
-- **Banco:** PostgreSQL + Prisma — na mesma VPS, sem exposição pública
-- **Proxy/TLS:** Caddy
+- **Backend:** Node.js + Fastify + TypeScript — container no Coolify
+- **Banco:** PostgreSQL + Prisma — recurso do Coolify, sem porta pública
+- **Deploy:** Coolify (API + Postgres em Docker) e Vercel (frontend)
 - **Repo:** monorepo com pnpm workspaces
 
 ## Decisões ainda em aberto

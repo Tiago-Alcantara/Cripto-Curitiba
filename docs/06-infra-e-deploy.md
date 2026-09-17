@@ -1,4 +1,9 @@
-# 06 — Infra e deploy
+# 06 — Infra e deploy (caminho manual)
+
+> **A topologia em uso é o Coolify** — ver [08-deploy-coolify](08-deploy-coolify.md)
+> e [ADR-0010](adr/0010-coolify.md). Este documento descreve o caminho manual
+> (Node + PM2 + Caddy direto na VPS), mantido como alternativa para quem subir
+> sem Coolify.
 
 ## Topologia
 
