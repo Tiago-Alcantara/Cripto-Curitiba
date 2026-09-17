@@ -111,9 +111,9 @@ ADMIN_SEED_EMAIL='voce@exemplo.com' ADMIN_SEED_PASSWORD='<senha forte>' \
   pnpm --filter @cripto/db exec tsx prisma/seed.ts
 ```
 
-O seed também cadastra o catálogo de criptomoedas. Os estabelecimentos de
-exemplo entram junto — apague os que começam com "Exemplo" pelo painel antes de
-divulgar o site.
+O seed cadastra o catálogo de criptomoedas e o admin. Os estabelecimentos de
+exemplo **não** entram: com `NODE_ENV=production` o seed os ignora, para não
+publicar lugar fictício como se fosse real.
 
 ## 6. Lado da Vercel
 

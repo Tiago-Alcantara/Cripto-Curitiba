@@ -131,10 +131,24 @@ async function seedEstablishments() {
 async function main() {
   const cryptos = await seedCryptos();
   const admin = await seedAdmin();
-  const establishments = await seedEstablishments();
 
-  console.log(`seed: ${cryptos} criptos, ${establishments} estabelecimentos`);
+  console.log(`seed: ${cryptos} criptos`);
   console.log(admin ? `seed: admin ${admin}` : 'seed: admin nao criado');
+
+  // Os estabelecimentos do seed sao dados de desenvolvimento (ver
+  // prisma/seeds/README.md). Em producao eles apareceriam no site como se
+  // fossem lugares reais, entao so entram fora de producao — ou com
+  // SEED_EXEMPLOS=1, para quem quiser popular um ambiente de teste.
+  const querExemplos = process.env.SEED_EXEMPLOS === '1';
+  const ehProducao = process.env.NODE_ENV === 'production';
+
+  if (ehProducao && !querExemplos) {
+    console.log('seed: estabelecimentos de exemplo ignorados (producao)');
+    return;
+  }
+
+  const establishments = await seedEstablishments();
+  console.log(`seed: ${establishments} estabelecimentos de exemplo`);
 }
 
 main()
