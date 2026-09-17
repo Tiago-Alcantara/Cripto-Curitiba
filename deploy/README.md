@@ -1,7 +1,11 @@
-# Deploy
+# Deploy (caminho manual, sem Coolify)
+
+> **O deploy em uso é o Coolify:** siga
+> [docs/08-deploy-coolify.md](../docs/08-deploy-coolify.md). Os arquivos desta
+> pasta são a alternativa para subir a API direto numa VPS, com PM2 e Caddy.
 
 Topologia e decisões estão em [docs/06-infra-e-deploy.md](../docs/06-infra-e-deploy.md)
-e nos [ADRs](../docs/adr/). Aqui ficam os arquivos prontos para usar.
+e nos [ADRs](../docs/adr/).
 
 | Arquivo | Onde vai |
 |---|---|
@@ -46,19 +50,11 @@ ADMIN_SEED_PASSWORD='<senha forte>' pnpm db:seed   # cria o admin; troque a senh
 ./deploy/deploy.sh
 ```
 
-## Segredos do GitHub Actions
+## Deploy contínuo
 
-O workflow `deploy-api.yml` precisa de:
-
-| Secret | O que é |
-|---|---|
-| `SSH_HOST` | IP ou hostname da VPS |
-| `SSH_USER` | `deploy` |
-| `SSH_KEY` | Chave privada com acesso ao usuário `deploy` |
-| `API_HEALTH_URL` | `https://<hostname-da-api>/api/v1/health` |
-
-Enquanto esses segredos não existirem, o deploy do backend é manual:
-`ssh deploy@<vps> 'cd ~/cripto-curitiba && ./deploy/deploy.sh'`.
+Neste caminho manual não há workflow de deploy: rode
+`ssh deploy@<vps> 'cd ~/cripto-curitiba && ./deploy/deploy.sh'` depois do merge.
+Com Coolify, o deploy é automático no push da `main`.
 
 ## Checklist antes do lançamento
 
