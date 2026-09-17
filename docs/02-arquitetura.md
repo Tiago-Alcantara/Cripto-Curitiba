@@ -10,7 +10,7 @@ overkill nesta fase ([ADR-0002](adr/0002-monolito-modular.md)).
 Usuário
   │  HTTPS
   ▼
-Vercel ── Next.js  (https://cripto-curitiba.vercel.app)
+Vercel ── Next.js  (https://criptocuritiba-web-one.vercel.app)
   │        ├── páginas públicas (SSR + ISR)
   │        └── Route Handlers /api/*  →  BFF do painel admin
   │  HTTPS  (server-to-server)   api.<host-da-vps>
@@ -103,7 +103,7 @@ renomeado quebra o build do frontend, não a produção.
 - **ISR** nas páginas de listagem e detalhe (`revalidate: 3600`). O dado muda
   raramente; a VPS quase não recebe tráfego de leitura.
 - **Revalidação sob demanda**: ao publicar/editar um estabelecimento, a API chama
-  `POST https://cripto-curitiba.vercel.app/api/revalidate` com um secret e as tags
+  `POST https://criptocuritiba-web-one.vercel.app/api/revalidate` com um secret e as tags
   afetadas (`estabelecimentos`, `estabelecimento:<slug>`). Conteúdo novo aparece
   em segundos, sem baixar o `revalidate`.
 - **Filtros client-side** na listagem: o MVP cabe inteiro em memória (dezenas a

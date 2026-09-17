@@ -134,7 +134,7 @@ Toda rota `/admin/*` exige o header; sem ele, `401`.
 Após publicar/editar/arquivar, a API chama o frontend:
 
 ```
-POST https://cripto-curitiba.vercel.app/api/revalidate
+POST https://criptocuritiba-web-one.vercel.app/api/revalidate
 x-revalidate-secret: <REVALIDATE_SECRET>
 { "tags": ["estabelecimentos", "estabelecimento:tartuferia-san-paulo"] }
 ```

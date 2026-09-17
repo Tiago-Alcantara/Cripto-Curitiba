@@ -21,7 +21,7 @@ Sem Docker por enquanto ([ADR-0003](adr/0003-sem-docker.md)).
 
 | Host | Aponta para |
 |---|---|
-| `cripto-curitiba.vercel.app` | Frontend (domínio gratuito da Vercel) |
+| `criptocuritiba-web-one.vercel.app` | Frontend (domínio gratuito da Vercel) |
 | `criptocuritiba-api.duckdns.org` | IP da VPS (A record no DuckDNS) |
 
 O frontend usa o domínio da Vercel ([ADR-0009](adr/0009-dominio-vercel-app.md)). A
@@ -98,8 +98,8 @@ HOST=127.0.0.1
 DATABASE_URL=postgresql://criptocuritiba:***@localhost:5432/criptocuritiba_prod
 JWT_SECRET=            # 32+ bytes; trocar invalida todas as sessões
 JWT_EXPIRES_IN=7d
-CORS_ORIGINS=https://cripto-curitiba.vercel.app,http://localhost:3000
-FRONTEND_URL=https://cripto-curitiba.vercel.app   # alvo da revalidação ISR (sempre produção)
+CORS_ORIGINS=https://criptocuritiba-web-one.vercel.app,http://localhost:3000
+FRONTEND_URL=https://criptocuritiba-web-one.vercel.app   # alvo da revalidação ISR (sempre produção)
 REVALIDATE_SECRET=
 TURNSTILE_SECRET_KEY=
 UPLOADS_DIR=/var/www/criptocuritiba/uploads
@@ -111,14 +111,14 @@ ADMIN_SEED_PASSWORD=       # só no primeiro seed
 
 ```
 NEXT_PUBLIC_API_URL=https://criptocuritiba-api.duckdns.org/api/v1
-NEXT_PUBLIC_SITE_URL=https://cripto-curitiba.vercel.app
+NEXT_PUBLIC_SITE_URL=https://criptocuritiba-web-one.vercel.app
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=
 REVALIDATE_SECRET=
 ADMIN_COOKIE_NAME=cc_admin   # cookie host-only gravado pelo BFF (ADR-0006)
 ```
 
 `CORS_ORIGINS` precisa cobrir também os preview deployments, cuja URL muda a cada
-PR (`https://cripto-curitiba-*.vercel.app`) — usar match por regex no plugin de
+PR (`https://criptocuritiba-web-*.vercel.app`) — usar match por regex no plugin de
 CORS, nunca `origin: true`. Nenhuma variável do admin é `NEXT_PUBLIC_*`: o token do
 painel só existe no lado servidor do Next.
 
