@@ -39,7 +39,7 @@ pnpm test         # vitest (usa o banco criptocuritiba_test)
 | `apps/api` | Fastify. Um módulo por domínio em `src/modules/<dominio>`, camadas `routes → service → repository` |
 | `apps/web` | Next.js (App Router) |
 | `packages/db` | Schema Prisma, migrations, seed, cliente |
-| `packages/shared` | Schemas Zod do contrato da API, compartilhados entre web e api |
+| `packages/shared` | Schemas Zod do contrato da API, compartilhados entre web e api. É publicado a partir de `dist/`, então precisa ser compilado antes de `apps/web` — o script `build` do web já faz isso |
 | `packages/config` | tsconfig base |
 
 ## Convenções
