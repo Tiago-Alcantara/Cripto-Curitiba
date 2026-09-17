@@ -7,7 +7,7 @@ hospedar o frontend em `*.vercel.app` ([ADR-0009](0009-dominio-vercel-app.md))
 
 O painel terá 1 a 3 usuários, criados manualmente. Não há cadastro público nem
 login de usuário final no MVP. O backend é Fastify (a auth não pode viver só no
-Next), e o frontend fica em `https://cripto-curitiba.vercel.app`, enquanto a API
+Next), e o frontend fica em `https://criptocuritiba-web-one.vercel.app`, enquanto a API
 fica em outro host (a VPS).
 
 O ponto que decide o desenho: **`vercel.app` está na Public Suffix List**. Não

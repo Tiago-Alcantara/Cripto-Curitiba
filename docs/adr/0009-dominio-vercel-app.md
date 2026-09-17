@@ -4,7 +4,7 @@
 
 ## Contexto
 
-O frontend roda no domínio gratuito da Vercel (`https://cripto-curitiba.vercel.app`),
+O frontend roda no domínio gratuito da Vercel (`https://criptocuritiba-web-one.vercel.app`),
 sem domínio próprio no lançamento. A API continua na VPS.
 
 Duas restrições técnicas decorrem disso:

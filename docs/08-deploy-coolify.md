@@ -75,8 +75,8 @@ Em `Environment Variables` da aplicação:
 DATABASE_URL=postgresql://postgres:<senha>@<servico-do-postgres>:5432/postgres
 JWT_SECRET=<32+ caracteres aleatorios>
 JWT_EXPIRES_IN=7d
-CORS_ORIGINS=https://<seu-projeto>.vercel.app,https://<seu-projeto>-*.vercel.app
-FRONTEND_URL=https://<seu-projeto>.vercel.app
+CORS_ORIGINS=https://criptocuritiba-web-one.vercel.app,https://criptocuritiba-web-*.vercel.app
+FRONTEND_URL=https://criptocuritiba-web-one.vercel.app
 REVALIDATE_SECRET=<mesmo valor configurado na Vercel>
 UPLOADS_DIR=/app/uploads
 PUBLIC_UPLOADS_URL=https://api.seudominio.com.br/uploads
@@ -121,7 +121,7 @@ Nas variáveis do projeto:
 
 ```
 NEXT_PUBLIC_API_URL=https://api.seudominio.com.br/api/v1
-NEXT_PUBLIC_SITE_URL=https://<seu-projeto>.vercel.app
+NEXT_PUBLIC_SITE_URL=https://criptocuritiba-web-one.vercel.app
 REVALIDATE_SECRET=<mesmo valor da API>
 ```
 
