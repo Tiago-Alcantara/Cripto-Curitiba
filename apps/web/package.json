@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --port 3000",
-    "build": "next build",
+    "build": "pnpm --filter @cripto/shared build && next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "echo \"sem testes de web ainda\" && exit 0"

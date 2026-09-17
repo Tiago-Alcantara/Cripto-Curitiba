@@ -6,8 +6,11 @@ const COOKIE_ADMIN = process.env.ADMIN_COOKIE_NAME ?? 'cc_admin';
  * Barreira rasa: so confere a presenca do cookie para evitar mostrar o painel
  * a quem nao esta logado. A validacao de verdade e do token, e acontece na API
  * a cada requisicao.
+ *
+ * Arquivo `proxy.ts` e nao `middleware.ts`: o Next 16 renomeou a convencao e
+ * avisa em todo build que a antiga esta descontinuada.
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const temCookie = Boolean(request.cookies.get(COOKIE_ADMIN)?.value);
   const ehLogin = request.nextUrl.pathname === '/admin/login';
 

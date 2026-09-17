@@ -15,9 +15,13 @@ e nos [ADRs](../docs/adr/). Aqui ficam os arquivos prontos para usar.
 1. Importar o repositório na Vercel.
 2. **Root Directory:** `apps/web`.
 3. Marcar *Include files outside root directory* (é um monorepo).
-4. Install Command: `pnpm install --frozen-lockfile`
-   Build Command: `pnpm --filter @cripto/db build && pnpm --filter @cripto/shared build && pnpm --filter @cripto/web build`
-5. Variáveis de ambiente: as de `apps/web/.env.example`.
+4. Install e Build Command: **deixar o padrão**. O script `build` de
+   `apps/web` já compila `@cripto/shared` antes do `next build` — sem isso o
+   build quebra com `Can't resolve '@cripto/shared'`, porque o pacote é
+   publicado a partir de `dist/`.
+5. Variáveis de ambiente: as de `apps/web/.env.example`. Se não for preencher
+   alguma, **apague** em vez de deixar em branco (string vazia vale como não
+   definida, mas o log avisa).
 
 O site fica no domínio `*.vercel.app` ([ADR-0009](../docs/adr/0009-dominio-vercel-app.md)).
 
