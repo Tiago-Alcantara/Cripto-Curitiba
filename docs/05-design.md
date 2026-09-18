@@ -84,7 +84,7 @@ servidos localmente — nunca hotlink de CDN de terceiros.
 - **Magic UI / Aceternity UI**: usar com parcimônia — só componentes pontuais que
   caibam no estilo clean. O default dessas libs puxa para o visual "cripto
   chamativo" que este projeto está evitando.
-- **Mapa:** ver [ADR-0005](adr/0005-mapa.md) — recomendação: React Leaflet + basemap CARTO Positron.
+- **Mapa:** ver [ADR-0005](adr/0005-mapa.md) — recomendação: React Leaflet + tiles padrão do OpenStreetMap.
 
 ## Referências para fechar a identidade
 

@@ -15,7 +15,7 @@ Nada de produto ainda; é o que destrava todo o resto.
 | # | Decisão | Recomendação |
 |---|---|---|
 | 1 | Identidade visual (cores, tipografia, logo) | Paleta proposta em [05-design](05-design.md); precisa de aval |
-| 2 | Biblioteca de mapa | React Leaflet + CARTO Positron ([ADR-0005](adr/0005-mapa.md)) |
+| 2 | Biblioteca de mapa | React Leaflet + tiles do OpenStreetMap ([ADR-0005](adr/0005-mapa.md)) |
 | 3 | Idioma do código | Código/DB em inglês, URLs/UI em português ([ADR-0008](adr/0008-idioma-do-codigo.md)) |
 | 4 | Auth do admin | BFF no Next + token Bearer + Argon2 ([ADR-0006](adr/0006-auth-admin.md)) |
 | 5 | Hostname da API | Subdomínio DuckDNS gratuito, já que o site fica em `*.vercel.app` ([ADR-0009](adr/0009-dominio-vercel-app.md)) |

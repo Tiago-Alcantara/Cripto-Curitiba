@@ -118,10 +118,15 @@ export function MapView({
           scrollWheelZoom={false}
           className="h-full w-full"
         >
-          {/* CARTO Positron: basemap claro e sem ruido, gratuito com atribuicao (ADR-0005). */}
+          {/*
+            Tiles padrao do OpenStreetMap: sem cadastro, sem chave. O CARTO
+            Positron usado antes passou a exigir API key (ver ADR-0005);
+            trocar para um provedor com estilo mais clean fica para quando o
+            projeto tiver conta cadastrada em algum deles.
+          */}
           <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             maxZoom={19}
           />
 
