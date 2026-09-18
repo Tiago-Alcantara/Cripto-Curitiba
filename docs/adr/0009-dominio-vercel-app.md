@@ -27,11 +27,18 @@ Duas restrições técnicas decorrem disso:
 | Rota | Quando | Hostname |
 |---|---|---|
 | **A** | Já existe (ou vale a pena registrar) um domínio | `api.<seu-dominio>` |
-| **B** | Custo zero | Subdomínio **DuckDNS** apontando para o IP da VPS: `criptocuritiba-api.duckdns.org` |
+| **B** | Custo zero, sem configurar DNS | URL gerada pelo Coolify, baseada em **sslip.io** (`https://<id>.<ip>.sslip.io`) — ver [08-deploy-coolify](../08-deploy-coolify.md#1-endereço-da-api) |
+| **C** | Custo zero, nome mais curto | Subdomínio **DuckDNS** apontando para o IP: `criptocuritiba-api.duckdns.org` |
 
-A rota B é gratuita, resolve por DNS normal e o Caddy emite o certificado pelo
-desafio HTTP-01 sem configuração extra. Os documentos usam esse hostname como
-placeholder.
+As rotas B e C são gratuitas e resolvem por DNS público, então o proxy emite o
+certificado pelo desafio HTTP-01 sem configuração extra. A B é a de menor
+atrito: nenhum cadastro, nenhum registro de DNS para criar.
+
+Vale notar por que nenhuma delas é crítica para o site funcionar: **o browser
+nunca chama a API diretamente** — todas as requisições do navegador vão para a
+origem da Vercel, que repassa no servidor ([ADR-0006](0006-auth-admin.md)). O
+certificado protege o trecho Vercel → API, por onde passam as credenciais do
+painel; não é o que impede mixed content na página.
 
 ## Consequências
 

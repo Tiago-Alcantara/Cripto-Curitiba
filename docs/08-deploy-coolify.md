@@ -17,18 +17,45 @@ Usuário → Vercel (Next.js)
              └── Postgres (sem porta pública)
 ```
 
-## 1. Domínio da API
+## 1. Endereço da API
 
-A API precisa de um hostname com HTTPS — o site é servido em HTTPS e o browser
-bloqueia chamada HTTP ([ADR-0009](adr/0009-dominio-vercel-app.md)).
+A API precisa de um endereço alcançável pela Vercel. Duas opções — a primeira
+não exige domínio nenhum.
 
-- Crie um registro **A** apontando para o IP da máquina do Coolify:
-  `api.seudominio.com.br` → `<IP>`.
-- Sem domínio próprio: um subdomínio **DuckDNS** gratuito serve
-  (`criptocuritiba-api.duckdns.org`). O Coolify emite o certificado via
-  Let's Encrypt sozinho, pelo desafio HTTP.
-- Verifique antes de seguir: `dig +short api.seudominio.com.br` tem que
-  devolver o IP da máquina.
+### Opção A — URL gerada pelo Coolify (sem domínio próprio)
+
+No campo `Domains` da aplicação existe um botão que gera um endereço
+automaticamente (nas versões atuais, **Generate Domain**). O Coolify monta um
+hostname a partir do IP do servidor usando **sslip.io** — um serviço de DNS que
+resolve `qualquer-coisa.<IP>.sslip.io` para aquele IP, sem cadastro:
+
+```
+https://a1b2c3.203.0.113.10.sslip.io
+```
+
+Como o hostname resolve publicamente, o Traefik do Coolify consegue emitir o
+certificado Let's Encrypt sozinho. Requisitos: **IP público** na máquina e
+**portas 80 e 443 abertas** para a internet.
+
+Guarde a URL gerada — ela entra em `PUBLIC_UPLOADS_URL` aqui e em
+`NEXT_PUBLIC_API_URL` na Vercel.
+
+> **Se o endereço gerado ficar só em `http://`** (certificado não emitido): o
+> site continua funcionando, porque o browser nunca fala com a API — todas as
+> chamadas do navegador vão para a origem da Vercel, que repassa no servidor
+> ([ADR-0006](adr/0006-auth-admin.md)). Mas o tráfego entre a Vercel e a API
+> passaria **em texto puro pela internet, incluindo a senha do admin no
+> login**. Trate como arranjo temporário: resolva o certificado antes de usar o
+> painel para valer.
+
+### Opção B — domínio próprio
+
+Registro **A** apontando para o IP da máquina (`api.seudominio.com.br` → IP), e
+o endereço vai no campo `Domains`. Confirme antes de seguir:
+`dig +short api.seudominio.com.br` tem que devolver o IP.
+
+Um subdomínio **DuckDNS** gratuito também serve, se preferir um nome mais curto
+que o do sslip.io.
 
 ## 2. Postgres como recurso do Coolify
 
@@ -56,7 +83,7 @@ automático a cada push).
 | Base Directory | `/` |
 | Dockerfile Location | `/apps/api/Dockerfile` |
 | Ports Exposes | `3333` |
-| Domain | `https://api.seudominio.com.br` |
+| Domain | a URL do passo 1 (gerada pelo Coolify ou seu domínio) |
 | Health Check Path | `/api/v1/health` |
 
 > O contexto de build é a **raiz** do repositório, não `apps/api`: é um monorepo
@@ -79,7 +106,7 @@ CORS_ORIGINS=https://criptocuritiba-web-one.vercel.app,https://criptocuritiba-we
 FRONTEND_URL=https://criptocuritiba-web-one.vercel.app
 REVALIDATE_SECRET=<mesmo valor configurado na Vercel>
 UPLOADS_DIR=/app/uploads
-PUBLIC_UPLOADS_URL=https://api.seudominio.com.br/uploads
+PUBLIC_UPLOADS_URL=https://<endereco-da-api>/uploads
 LOG_LEVEL=info
 TURNSTILE_SECRET_KEY=      # opcional; sem ele, anti-spam = honeypot + rate limit
 ```
@@ -99,7 +126,7 @@ container.
    antes de iniciar a API — o banco é criado/atualizado sozinho.
 3. O health check em `/api/v1/health` passa a responder.
 
-Confira de fora: `curl https://api.seudominio.com.br/api/v1/health` →
+Confira de fora: `curl https://<endereco-da-api>/api/v1/health` →
 `{"status":"ok",...}`.
 
 ### Criar o usuário admin (uma vez)
@@ -120,7 +147,7 @@ publicar lugar fictício como se fosse real.
 Nas variáveis do projeto:
 
 ```
-NEXT_PUBLIC_API_URL=https://api.seudominio.com.br/api/v1
+NEXT_PUBLIC_API_URL=https://<endereco-da-api>/api/v1
 NEXT_PUBLIC_SITE_URL=https://criptocuritiba-web-one.vercel.app
 REVALIDATE_SECRET=<mesmo valor da API>
 ```
