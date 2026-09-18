@@ -1,8 +1,10 @@
-# Imagem da API para o Coolify.
+# Imagem da API (o frontend vai para a Vercel, nao para o Docker).
 #
-# O contexto de build e a RAIZ do repositorio (e um monorepo pnpm), nao a pasta
-# apps/api. No Coolify: "Base Directory" = / e "Dockerfile Location" =
-# /apps/api/Dockerfile.
+# Fica na raiz de proposito: o contexto de build precisa ser a raiz do
+# repositorio, porque e um monorepo pnpm e a imagem depende de packages/.
+# Deixar o arquivo aqui faz a configuracao padrao do Coolify funcionar sem
+# ajuste de caminho — era ai que o primeiro deploy quebrava
+# ("failed to read dockerfile: open Dockerfile: no such file or directory").
 
 FROM node:22-bookworm-slim AS base
 
