@@ -30,7 +30,53 @@ export function loadEnv(source: NodeJS.ProcessEnv = process.env): Env {
     throw new Error(`Variaveis de ambiente invalidas:\n${problemas}`);
   }
 
-  return parsed.data;
+  const env = parsed.data;
+
+  // Em producao a checagem e mais dura: o que so aparece na primeira tentativa
+  // de login (JWT_SECRET) tem que derrubar o boot, com o nome da variavel na
+  // mensagem, em vez de estourar la dentro do registro de plugin.
+  if (env.NODE_ENV === 'production') {
+    const faltando: string[] = [];
+
+    if (!env.JWT_SECRET) {
+      faltando.push(
+        '  - JWT_SECRET: obrigatoria (32+ caracteres). Gere com: openssl rand -base64 32',
+      );
+    }
+
+    if (faltando.length > 0) {
+      throw new Error(`Variaveis de ambiente faltando em producao:\n${faltando.join('\n')}`);
+    }
+  }
+
+  return env;
+}
+
+/**
+ * Avisos de configuracao incompleta que nao impedem a API de subir, mas
+ * desligam funcionalidade em silencio — o tipo de coisa que so se descobre
+ * quando alguem publica um estabelecimento e o site nao atualiza.
+ */
+export function avisosDeConfiguracao(env: Env): string[] {
+  const avisos: string[] = [];
+
+  if (env.NODE_ENV !== 'production') return avisos;
+
+  if (!env.FRONTEND_URL || !env.REVALIDATE_SECRET) {
+    avisos.push(
+      'revalidacao do ISR desligada: defina FRONTEND_URL e REVALIDATE_SECRET, ' +
+        'senao o site so atualiza no proximo ciclo de cache (1h)',
+    );
+  }
+
+  if (!env.TURNSTILE_SECRET_KEY) {
+    avisos.push(
+      'TURNSTILE_SECRET_KEY ausente: o formulario de sugestao fica protegido ' +
+        'apenas por honeypot e rate limit',
+    );
+  }
+
+  return avisos;
 }
 
 /** Transforma `CORS_ORIGINS` em matchers, suportando `https://app-*.vercel.app`. */

@@ -11,9 +11,11 @@ FROM node:22-bookworm-slim AS base
 ENV PNPM_HOME=/pnpm
 ENV PATH=$PNPM_HOME:$PATH
 
-# openssl e exigido pelo engine de schema do Prisma (migrate deploy).
+# openssl: exigido pelo engine de schema do Prisma (migrate deploy).
+# curl: o healthcheck proprio usa node, mas o do Coolify (configurado pela UI)
+# precisa de curl ou wget dentro da imagem.
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends openssl ca-certificates \
+  && apt-get install -y --no-install-recommends openssl ca-certificates curl \
   && rm -rf /var/lib/apt/lists/*
 
 RUN corepack enable

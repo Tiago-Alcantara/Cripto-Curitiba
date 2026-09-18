@@ -84,7 +84,17 @@ automático a cada push).
 | Dockerfile Location | `/Dockerfile` (é o padrão — não precisa mexer) |
 | Ports Exposes | `3333` |
 | Domain | a URL do passo 1 (gerada pelo Coolify ou seu domínio) |
+| Path (no cadastro do domínio) | **vazio** — ver o aviso abaixo |
 | Health Check Path | `/api/v1/health` |
+
+> **Deixe o campo `Path` do domínio vazio.** No Coolify ele não significa "a
+> aplicação responde a partir daqui": significa "monte a aplicação nesse
+> prefixo e **remova** o prefixo antes de repassar". Preencher `/api/v1` ali
+> produz dois sintomas confusos ao mesmo tempo: `/health` devolve
+> `no available server` (nenhuma rota casa) e `/api/v1/health` devolve
+> `Rota GET /health nao existe` (o prefixo foi removido antes de chegar na
+> API). O `/api/v1` é do código, e quem precisa dele é a Vercel, em
+> `NEXT_PUBLIC_API_URL`.
 
 > O contexto de build é a **raiz** do repositório: é um monorepo pnpm e a imagem
 > precisa de `packages/`. O `Dockerfile` fica na raiz justamente para que a
@@ -170,6 +180,8 @@ rodando lint, tipos e testes em cada PR.
 
 | Sintoma | Causa provável |
 |---|---|
+| `no available server` no navegador | Mensagem do Traefik, não da API: existe rota mas nenhum container saudável atrás dela — ou o campo `Path` do domínio está preenchido, e a URL que você tentou não casa com ele |
+| `{"code":"NOT_FOUND","message":"Rota GET /health nao existe"}` | A API respondeu (bom sinal), mas chegou nela sem o prefixo: `Path` preenchido no cadastro do domínio |
 | Deploy passa, mas o domínio dá 502 | `HOST` sobrescrito para `127.0.0.1`, ou "Ports Exposes" diferente de `3333` |
 | `DatabaseNotReachable` no log | `DATABASE_URL` usando `localhost` em vez do nome do serviço Postgres na rede do Docker |
 | Site na Vercel mostra "não conseguimos carregar" | `NEXT_PUBLIC_API_URL` errada, ou o domínio da API sem certificado ainda |
