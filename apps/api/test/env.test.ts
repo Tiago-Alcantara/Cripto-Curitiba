@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseCorsOrigins } from '../src/env.js';
+import { avisosDeConfiguracao, loadEnv, parseCorsOrigins } from '../src/env.js';
 
 /** Reproduz o teste de origem que o @fastify/cors faz com a lista. */
 function permite(configuracao: string, origem: string): boolean {
@@ -43,5 +43,55 @@ describe('parseCorsOrigins', () => {
 
   it('ignora espacos e entradas vazias', () => {
     expect(permite(' http://localhost:3000 , ,', 'http://localhost:3000')).toBe(true);
+  });
+});
+
+const BASE = {
+  DATABASE_URL: 'postgresql://u:p@localhost:5432/db',
+  JWT_SECRET: 'segredo-de-teste-com-mais-de-32-caracteres!!',
+};
+
+describe('loadEnv em producao', () => {
+  it('derruba o boot quando falta JWT_SECRET, dizendo o nome da variavel', () => {
+    expect(() => loadEnv({ ...BASE, JWT_SECRET: undefined, NODE_ENV: 'production' })).toThrow(
+      /JWT_SECRET/,
+    );
+  });
+
+  it('recusa JWT_SECRET curta demais', () => {
+    expect(() => loadEnv({ ...BASE, JWT_SECRET: 'curta', NODE_ENV: 'production' })).toThrow(
+      /JWT_SECRET/,
+    );
+  });
+
+  it('exige DATABASE_URL', () => {
+    expect(() => loadEnv({ ...BASE, DATABASE_URL: undefined })).toThrow(/DATABASE_URL/);
+  });
+
+  it('sobe fora de producao sem JWT_SECRET', () => {
+    expect(() => loadEnv({ ...BASE, JWT_SECRET: undefined })).not.toThrow();
+  });
+});
+
+describe('avisosDeConfiguracao', () => {
+  it('avisa quando a revalidacao do ISR fica desligada em producao', () => {
+    const env = loadEnv({ ...BASE, NODE_ENV: 'production' });
+
+    expect(avisosDeConfiguracao(env).join(' ')).toMatch(/revalidacao do ISR/);
+  });
+
+  it('nao avisa sobre ISR quando as duas variaveis existem', () => {
+    const env = loadEnv({
+      ...BASE,
+      NODE_ENV: 'production',
+      FRONTEND_URL: 'https://criptocuritiba-web-one.vercel.app',
+      REVALIDATE_SECRET: 'segredo',
+    });
+
+    expect(avisosDeConfiguracao(env).join(' ')).not.toMatch(/revalidacao do ISR/);
+  });
+
+  it('fica quieto fora de producao', () => {
+    expect(avisosDeConfiguracao(loadEnv(BASE))).toEqual([]);
   });
 });

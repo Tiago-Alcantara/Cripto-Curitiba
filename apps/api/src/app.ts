@@ -3,7 +3,7 @@ import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
 import Fastify, { type FastifyInstance } from 'fastify';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
-import { type Env, loadEnv, parseCorsOrigins } from './env.js';
+import { avisosDeConfiguracao, type Env, loadEnv, parseCorsOrigins } from './env.js';
 import { adminRoutes } from './modules/admin/admin.routes.js';
 import { authRoutes } from './modules/auth/auth.routes.js';
 import { cryptosRoutes } from './modules/cryptos/cryptos.routes.js';
@@ -36,6 +36,10 @@ export async function buildApp(
   });
 
   app.decorate('config', env);
+
+  for (const aviso of avisosDeConfiguracao(env)) {
+    app.log.warn(aviso);
+  }
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
 
