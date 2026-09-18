@@ -81,13 +81,16 @@ automático a cada push).
 | Branch | `main` |
 | Build Pack | **Dockerfile** |
 | Base Directory | `/` |
-| Dockerfile Location | `/apps/api/Dockerfile` |
+| Dockerfile Location | `/Dockerfile` (é o padrão — não precisa mexer) |
 | Ports Exposes | `3333` |
 | Domain | a URL do passo 1 (gerada pelo Coolify ou seu domínio) |
 | Health Check Path | `/api/v1/health` |
 
-> O contexto de build é a **raiz** do repositório, não `apps/api`: é um monorepo
-> pnpm e a imagem precisa de `packages/`. Por isso Base Directory `/`.
+> O contexto de build é a **raiz** do repositório: é um monorepo pnpm e a imagem
+> precisa de `packages/`. O `Dockerfile` fica na raiz justamente para que a
+> configuração padrão funcione. Se o deploy falhar com
+> `failed to read dockerfile: open Dockerfile: no such file or directory`, é
+> porque Base Directory ou Dockerfile Location apontam para outro lugar.
 
 ### Storage das fotos
 
@@ -121,7 +124,7 @@ container.
 
 `Deploy`. O que acontece:
 
-1. Coolify constrói a imagem (`apps/api/Dockerfile`).
+1. Coolify constrói a imagem (`Dockerfile` na raiz).
 2. O container sobe e o `docker-entrypoint.sh` roda `prisma migrate deploy`
    antes de iniciar a API — o banco é criado/atualizado sozinho.
 3. O health check em `/api/v1/health` passa a responder.

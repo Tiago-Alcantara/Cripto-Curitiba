@@ -15,9 +15,10 @@ portas 80/443.
 
 ## Decisão
 
-A API é publicada como **aplicação Docker no Coolify**, a partir de
-[`apps/api/Dockerfile`](../../apps/api/Dockerfile), com o contexto de build na
-raiz do repositório (é um monorepo). O Postgres é um **recurso do Coolify**, sem
+A API é publicada como **aplicação Docker no Coolify**, a partir do
+[`Dockerfile`](../../Dockerfile) na raiz do repositório — ele fica lá porque o
+contexto de build precisa ser a raiz (é um monorepo) e porque assim a
+configuração padrão do Coolify funciona sem ajuste de caminho. O Postgres é um **recurso do Coolify**, sem
 porta pública. O frontend continua na Vercel.
 
 As migrations rodam no boot do container
