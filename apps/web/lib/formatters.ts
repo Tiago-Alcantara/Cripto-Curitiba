@@ -83,6 +83,40 @@ export function listarHorarios(horarios: Horarios | null): HorarioDia[] {
   });
 }
 
+const DIA_SCHEMA_ORG: Record<keyof Horarios, string> = {
+  mon: 'https://schema.org/Monday',
+  tue: 'https://schema.org/Tuesday',
+  wed: 'https://schema.org/Wednesday',
+  thu: 'https://schema.org/Thursday',
+  fri: 'https://schema.org/Friday',
+  sat: 'https://schema.org/Saturday',
+  sun: 'https://schema.org/Sunday',
+};
+
+export type OpeningHoursSpecification = {
+  '@type': 'OpeningHoursSpecification';
+  dayOfWeek: string;
+  opens: string;
+  closes: string;
+};
+
+/** `horarios` como `openingHoursSpecification` do schema.org, para o JSON-LD. */
+export function horariosParaSchema(horarios: Horarios | null): OpeningHoursSpecification[] {
+  if (!horarios) return [];
+
+  return DIAS.flatMap(({ chave }) => {
+    const faixas = horarios[chave];
+    if (!faixas || faixas.length === 0) return [];
+
+    return faixas.map((faixa) => ({
+      '@type': 'OpeningHoursSpecification' as const,
+      dayOfWeek: DIA_SCHEMA_ORG[chave],
+      opens: faixa.open,
+      closes: faixa.close,
+    }));
+  });
+}
+
 export function urlComoChegar(estabelecimento: Estabelecimento): string {
   if (estabelecimento.contato.googleMaps) return estabelecimento.contato.googleMaps;
 
