@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Cornija, FotoPlaceholder, Rotulo } from '@/components/registro/ui';
-import { POSTS } from '@/lib/caderno';
+import { dataParaIso, POSTS } from '@/lib/caderno';
+import { SITE_URL as siteUrl } from '@/lib/env';
 
 export const metadata: Metadata = {
   title: 'Caderno — notícias da cena cripto em Curitiba',
@@ -11,8 +12,31 @@ export const metadata: Metadata = {
 export default function CadernoPage() {
   const [capa, ...demais] = POSTS;
 
+  // Sem rota de post individual ainda (ver lib/caderno.ts), entao o JSON-LD
+  // descreve o Blog como um todo: cada item aponta para /caderno, nao para
+  // uma URL propria.
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: 'Caderno da cidade — CriptoCuritiba',
+    url: `${siteUrl}/caderno`,
+    inLanguage: 'pt-BR',
+    blogPost: POSTS.map((post) => ({
+      '@type': 'BlogPosting',
+      headline: post.titulo,
+      description: post.resumo,
+      datePublished: dataParaIso(post.data),
+      url: `${siteUrl}/caderno`,
+    })),
+  };
+
   return (
     <div className="mx-auto w-full max-w-[1140px] animate-entrada px-7 pt-11 pb-[84px]">
+      {/* JSON-LD para o Google e IA entenderem o conteudo do caderno. */}
+      <script type="application/ld+json" suppressHydrationWarning>
+        {JSON.stringify(jsonLd)}
+      </script>
+
       <Rotulo className="mb-2.5">Caderno da cidade · edição corrente</Rotulo>
       <h1 className="mt-0 mb-4 font-display font-medium text-[clamp(32px,5vw,50px)] leading-none">
         Notícias da cena cripto em Curitiba

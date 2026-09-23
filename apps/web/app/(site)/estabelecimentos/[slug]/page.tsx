@@ -18,6 +18,7 @@ import {
   descreverPagamento,
   enderecoEmLinha,
   faixaPreco,
+  horariosParaSchema,
   listarHorarios,
   urlComoChegar,
 } from '@/lib/formatters';
@@ -88,10 +89,16 @@ export default async function EstabelecimentoPage({ params }: Props) {
         : undefined,
     telephone: estabelecimento.contato.telefone ?? undefined,
     url: estabelecimento.contato.site ?? undefined,
+    image:
+      estabelecimento.fotos.length > 0
+        ? estabelecimento.fotos.map((foto) => foto.url)
+        : (estabelecimento.fotoCapa ?? undefined),
+    priceRange: preco?.texto,
     currenciesAccepted: [...new Set(estabelecimento.pagamentos.map((p) => p.cripto))].join(', '),
     paymentAccepted: estabelecimento.pagamentos.map(
       (p) => `${p.cripto} (${descreverPagamento(p)})`,
     ),
+    openingHoursSpecification: horariosParaSchema(estabelecimento.horarios),
   };
 
   const numeroH2 = 'mt-0 mb-3.5 font-display font-medium text-[24px] leading-[1.1]';

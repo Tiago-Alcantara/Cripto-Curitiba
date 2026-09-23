@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ApiOffline } from '@/components/api-offline';
 import { Curadoria } from '@/components/registro/curadoria';
@@ -11,6 +12,16 @@ import { listarBairros, listarCriptomoedas, listarEstabelecimentos, tolerante } 
 import { numerarFichas } from '@/lib/registro';
 
 export const revalidate = 3600;
+
+// A home herdava so o metadata generico do layout raiz; aqui ganha
+// title/description proprios, focados na intencao de busca principal
+// ("onde gastar cripto em Curitiba") em vez do title de marca padrao.
+export const metadata: Metadata = {
+  title: 'Onde usar cripto em Curitiba — mapa e registro de estabelecimentos',
+  description:
+    'Cafés, bares, lojas e restaurantes que aceitam Bitcoin e outras criptomoedas em Curitiba, com selo de verificação e data da última confirmação.',
+  alternates: { canonical: '/' },
+};
 
 function Contador({
   valor,
