@@ -71,7 +71,7 @@ apps/
     src/plugins/        prisma, auth (JWT), error-handler
     test/               testes de integração (Vitest + Postgres real)
   web/                  Next.js
-    app/(site)/         páginas públicas (home, listagem, detalhe, mapa, sugerir)
+    app/(site)/         páginas públicas (início, mapa, ficha do local, indicar, sobre, caderno)
     app/admin/          painel (fila de moderação, CRUD de estabelecimentos)
     app/api/            BFF: proxy de sessão do admin e revalidação do ISR
 packages/

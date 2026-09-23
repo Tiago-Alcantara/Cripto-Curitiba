@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic';
 const MapView = dynamic(() => import('./map-view').then((modulo) => modulo.MapView), {
   ssr: false,
   loading: () => (
-    <div className="flex h-[480px] items-center justify-center rounded-card border border-border bg-surface text-muted text-sm">
+    <div className="flex aspect-[0.92/1] min-h-[420px] w-full items-center justify-center rounded-[150px_150px_3px_3px] border-[3px] border-pinheiro bg-pinheiro font-mono text-[#b9c4bd] text-[10px] uppercase tracking-[0.14em]">
       Carregando mapa…
     </div>
   ),
@@ -15,7 +15,7 @@ const MapView = dynamic(() => import('./map-view').then((modulo) => modulo.MapVi
 
 type Props = {
   estabelecimentos: EstabelecimentoResumo[];
-  altura?: string;
+  tamanho?: string;
   selecionadoId?: string | null;
   aoSelecionar?: (id: string | null) => void;
   enquadrarNosPins?: boolean;

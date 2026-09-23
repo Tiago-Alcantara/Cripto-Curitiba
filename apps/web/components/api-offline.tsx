@@ -8,17 +8,22 @@ import Link from 'next/link';
 export function ApiOffline({ compacto = false }: { compacto?: boolean }) {
   return (
     <div
-      className={`rounded-card border border-border border-dashed bg-surface text-center ${
+      className={`rounded-[2px] border border-regua border-dashed bg-papel-claro text-center ${
         compacto ? 'px-4 py-6' : 'px-6 py-12'
       }`}
     >
-      <h2 className="font-medium text-lg">Não conseguimos carregar os lugares agora</h2>
-      <p className="mx-auto mt-2 max-w-md text-muted text-sm">
+      <h2 className="m-0 font-display font-medium text-[21px]">
+        Não conseguimos carregar o registro agora
+      </h2>
+      <p className="mx-auto mt-2 mb-0 max-w-md text-[14px] text-tinta-media">
         A lista fica fora do ar por alguns instantes quando o servidor é atualizado. Recarregue a
         página em um minuto.
       </p>
-      <Link href="/sugerir" className="mt-4 inline-block text-primary text-sm hover:underline">
-        Enquanto isso, você pode sugerir um lugar
+      <Link
+        href="/indicar"
+        className="mt-4 inline-block font-bold text-[11.5px] text-verde uppercase tracking-[0.11em] hover:text-verde-escuro"
+      >
+        Enquanto isso, indique um local →
       </Link>
     </div>
   );
