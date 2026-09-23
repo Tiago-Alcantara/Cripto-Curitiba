@@ -63,6 +63,13 @@ html {
 
 body {
   font-family: var(--font-sans);
+  /*
+   * Archivo Regular (400, o peso padrao do navegador) le fino demais nos
+   * paragrafos pequenos do site (13-16.5px) sobre o fundo cal. Titulos e
+   * botoes ja tem peso proprio (font-medium/font-bold) e nao sao afetados;
+   * isso so engrossa o texto corrido que ficaria em 400.
+   */
+  font-weight: 500;
 }
 
 ::selection {
