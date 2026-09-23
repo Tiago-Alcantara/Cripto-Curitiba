@@ -1,13 +1,13 @@
 'use client';
 
 import type { EstabelecimentoResumo } from '@cripto/shared';
-import { rotulos } from '@cripto/shared';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import Link from 'next/link';
 import { useEffect } from 'react';
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer, useMap, ZoomControl } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
+import { rotuloCategoria } from '@/lib/registro';
 
 const CENTRO_DE_CURITIBA: [number, number] = [-25.4284, -49.2733];
 
@@ -18,32 +18,28 @@ export function temCoordenada(e: EstabelecimentoResumo): e is ComCoordenada {
 }
 
 /**
- * Pin desenhado em SVG para nao depender das imagens padrao do Leaflet, que
- * quebram em bundler (o caminho das imagens e resolvido em runtime).
+ * "O pinhao e o nosso pin": semente girada 45deg (border-radius 50% 50% 50% 0).
+ * Cal com contorno verde se verificado, ocre se veio da comunidade; 13px
+ * normal, 21px selecionado (docs/05-design.md). Desenhado em HTML para nao
+ * depender das imagens padrao do Leaflet, que quebram em bundler.
  */
-function criarIcone(verificado: boolean, destacado = false) {
-  const cor = verificado ? '#0e5c43' : '#b4751a';
-  const escala = destacado ? 1.35 : 1;
-  const largura = Math.round(26 * escala);
-  const altura = Math.round(34 * escala);
+function criarIcone(verificado: boolean, destacado: boolean) {
+  const lado = destacado ? 21 : 13;
+  const caixa = lado + 12;
+  const cor = verificado ? '#efe9dd' : '#c9902c';
 
   return L.divIcon({
-    className: 'cripto-pin',
-    html: `<svg width="${largura}" height="${altura}" viewBox="0 0 26 34" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M13 0C5.82 0 0 5.82 0 13c0 9.2 11.6 20.2 12.1 20.7a1.3 1.3 0 0 0 1.8 0C14.4 33.2 26 22.2 26 13 26 5.82 20.18 0 13 0Z" fill="${cor}"${
-        destacado ? ' stroke="#1a1a18" stroke-width="1.5"' : ''
-      }/>
-      <circle cx="13" cy="13" r="5" fill="#fff"/>
-    </svg>`,
-    iconSize: [largura, altura],
-    iconAnchor: [Math.round(largura / 2), altura],
-    popupAnchor: [0, -altura + 4],
+    className: 'pin-pinhao',
+    html: `<span style="position:absolute;left:50%;top:50%;width:${lado}px;height:${lado}px;border-radius:50% 50% 50% 0;background:${cor};border:1.5px solid #0a4a36;transform:translate(-50%,-50%) rotate(45deg);"></span>`,
+    iconSize: [caixa, caixa],
+    iconAnchor: [caixa / 2, caixa / 2],
+    popupAnchor: [0, -lado],
   });
 }
 
 const icones = {
-  verificado: criarIcone(true),
-  comunidade: criarIcone(false),
+  verificado: criarIcone(true, false),
+  comunidade: criarIcone(false, false),
   verificadoDestacado: criarIcone(true, true),
   comunidadeDestacado: criarIcone(false, true),
 };
@@ -53,6 +49,15 @@ function iconeDe(estabelecimento: ComCoordenada, destacado: boolean) {
 
   if (destacado) return verificado ? icones.verificadoDestacado : icones.comunidadeDestacado;
   return verificado ? icones.verificado : icones.comunidade;
+}
+
+// Tipo estrutural: @types/leaflet nao traz o MarkerCluster do plugin.
+function iconeDeGrupo(grupo: { getChildCount: () => number }) {
+  return L.divIcon({
+    html: `<span>${grupo.getChildCount()}</span>`,
+    className: 'marker-cluster-registro',
+    iconSize: L.point(30, 30),
+  });
 }
 
 /** Enquadra o mapa nos pins existentes; sem pins, fica no centro da cidade. */
@@ -70,7 +75,7 @@ function Enquadrar({ pontos }: { pontos: ComCoordenada[] }) {
 
     map.fitBounds(
       L.latLngBounds(pontos.map((p) => [p.latitude, p.longitude] as [number, number])),
-      { padding: [48, 48], maxZoom: 16 },
+      { padding: [56, 56], maxZoom: 16 },
     );
   }, [map, pontos]);
 
@@ -83,7 +88,7 @@ function Focar({ alvo }: { alvo: ComCoordenada | null }) {
 
   useEffect(() => {
     if (!alvo) return;
-    map.flyTo([alvo.latitude, alvo.longitude], Math.max(map.getZoom(), 16), { duration: 0.6 });
+    map.flyTo([alvo.latitude, alvo.longitude], Math.max(map.getZoom(), 15), { duration: 0.6 });
   }, [map, alvo]);
 
   return null;
@@ -91,90 +96,87 @@ function Focar({ alvo }: { alvo: ComCoordenada | null }) {
 
 type Props = {
   estabelecimentos: EstabelecimentoResumo[];
-  /** Classe de altura do mapa; a pagina dedicada usa uma bem maior. */
-  altura?: string;
+  /** Classes de tamanho do campo do mapa. */
+  tamanho?: string;
   selecionadoId?: string | null;
   aoSelecionar?: (id: string | null) => void;
   enquadrarNosPins?: boolean;
 };
 
+/**
+ * Campo do mapa em verde-pinheiro com topo em arco (150px 150px 3px 3px). O
+ * zoom fica embaixo porque o arco corta o canto superior.
+ */
 export function MapView({
   estabelecimentos,
-  altura = 'h-[480px]',
+  tamanho = 'aspect-[0.92/1] min-h-[420px]',
   selecionadoId = null,
   aoSelecionar,
   enquadrarNosPins = false,
 }: Props) {
   const comCoordenada = estabelecimentos.filter(temCoordenada);
-  const semCoordenada = estabelecimentos.length - comCoordenada.length;
   const selecionado = comCoordenada.find((e) => e.id === selecionadoId) ?? null;
 
   return (
-    <div className="space-y-3">
-      <div className={`${altura} overflow-hidden rounded-card border border-border`}>
-        <MapContainer
-          center={CENTRO_DE_CURITIBA}
-          zoom={12}
-          scrollWheelZoom={false}
-          className="h-full w-full"
+    <div
+      className={`mapa-registro relative isolate w-full overflow-hidden rounded-[150px_150px_3px_3px] border-[3px] border-pinheiro bg-pinheiro ${tamanho}`}
+    >
+      <MapContainer
+        center={CENTRO_DE_CURITIBA}
+        zoom={12}
+        scrollWheelZoom={false}
+        zoomControl={false}
+        className="h-full w-full"
+      >
+        <ZoomControl position="bottomleft" />
+        {/*
+          Tiles padrao do OpenStreetMap: sem cadastro, sem chave (ADR-0005).
+          O filtro em globals.css aquece os tiles para casar com o papel.
+        */}
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          maxZoom={19}
+        />
+
+        {enquadrarNosPins ? <Enquadrar pontos={comCoordenada} /> : null}
+        <Focar alvo={selecionado} />
+
+        <MarkerClusterGroup
+          chunkedLoading
+          maxClusterRadius={40}
+          iconCreateFunction={iconeDeGrupo}
+          showCoverageOnHover={false}
         >
-          {/*
-            Tiles padrao do OpenStreetMap: sem cadastro, sem chave. O CARTO
-            Positron usado antes passou a exigir API key (ver ADR-0005);
-            trocar para um provedor com estilo mais clean fica para quando o
-            projeto tiver conta cadastrada em algum deles.
-          */}
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            maxZoom={19}
-          />
-
-          {enquadrarNosPins ? <Enquadrar pontos={comCoordenada} /> : null}
-          <Focar alvo={selecionado} />
-
-          <MarkerClusterGroup chunkedLoading maxClusterRadius={45}>
-            {comCoordenada.map((estabelecimento) => (
-              <Marker
-                key={estabelecimento.id}
-                position={[estabelecimento.latitude, estabelecimento.longitude]}
-                icon={iconeDe(estabelecimento, estabelecimento.id === selecionadoId)}
-                eventHandlers={
-                  aoSelecionar ? { click: () => aoSelecionar(estabelecimento.id) } : undefined
-                }
-              >
-                <Popup>
-                  <strong className="block text-sm">{estabelecimento.nome}</strong>
-                  <span className="text-xs">
-                    {rotulos.categoria[estabelecimento.categoria as keyof typeof rotulos.categoria]}{' '}
-                    · {estabelecimento.bairro}
-                  </span>
-                  <span className="mt-1 block text-xs">
-                    {[...new Set(estabelecimento.pagamentos.map((p) => p.cripto))].join(', ') ||
-                      'sem forma de pagamento registrada'}
-                  </span>
-                  <Link
-                    href={`/estabelecimentos/${estabelecimento.slug}`}
-                    className="mt-2 inline-block text-xs underline"
-                  >
-                    Ver detalhes
-                  </Link>
-                </Popup>
-              </Marker>
-            ))}
-          </MarkerClusterGroup>
-        </MapContainer>
-      </div>
-
-      {semCoordenada > 0 ? (
-        <p className="text-muted text-xs">
-          {semCoordenada}{' '}
-          {semCoordenada === 1
-            ? 'lugar ainda sem coordenada não aparece no mapa'
-            : 'lugares ainda sem coordenada não aparecem no mapa'}{' '}
-          — todos continuam na lista.
-        </p>
-      ) : null}
+          {comCoordenada.map((estabelecimento) => (
+            <Marker
+              key={estabelecimento.id}
+              position={[estabelecimento.latitude, estabelecimento.longitude]}
+              icon={iconeDe(estabelecimento, estabelecimento.id === selecionadoId)}
+              zIndexOffset={estabelecimento.id === selecionadoId ? 1000 : 0}
+              title={estabelecimento.nome}
+              eventHandlers={
+                aoSelecionar ? { click: () => aoSelecionar(estabelecimento.id) } : undefined
+              }
+            >
+              <Popup closeButton={false}>
+                <strong className="mb-0.5 block font-display font-medium text-[15px]">
+                  {estabelecimento.nome}
+                </strong>
+                <span className="block font-mono text-[9.5px] text-tinta-fraca uppercase tracking-[0.1em]">
+                  {rotuloCategoria(estabelecimento.categoria)} · {estabelecimento.bairro}
+                </span>
+                <Link
+                  href={`/estabelecimentos/${estabelecimento.slug}`}
+                  className="mt-1.5 inline-block font-bold text-[10.5px] text-verde uppercase tracking-[0.1em]"
+                >
+                  Ver ficha →
+                </Link>
+              </Popup>
+            </Marker>
+          ))}
+        </MarkerClusterGroup>
+      </MapContainer>
     </div>
   );
 }

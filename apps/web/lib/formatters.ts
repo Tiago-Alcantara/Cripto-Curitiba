@@ -3,12 +3,20 @@ import { rotulos } from '@cripto/shared';
 
 const MESES_ATE_DESATUALIZADO = 12;
 
+/** Formato do selo do registro: `fev/2026`. */
 export function formatarMesAno(iso: string | null): string | null {
   if (!iso) return null;
 
-  return new Intl.DateTimeFormat('pt-BR', { month: 'short', year: 'numeric' })
-    .format(new Date(iso))
-    .replace('.', '');
+  const partes = new Intl.DateTimeFormat('pt-BR', {
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'America/Sao_Paulo',
+  }).formatToParts(new Date(iso));
+
+  const mes = partes.find((p) => p.type === 'month')?.value.replace('.', '');
+  const ano = partes.find((p) => p.type === 'year')?.value;
+
+  return mes && ano ? `${mes}/${ano}` : null;
 }
 
 /** Um dado confirmado ha mais de um ano vira pedido de ajuda, nao afirmacao. */

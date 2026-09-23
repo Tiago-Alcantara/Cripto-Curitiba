@@ -1,5 +1,13 @@
 # 05 — Design
 
+> **Atualizado para o v2 ("almanaque civil de Curitiba").** A direção visual em
+> vigor no site público está em [design/v2-contexto.md](design/v2-contexto.md)
+> (decisões, tokens, o que foi descartado) e
+> [design/v2-handoff.md](design/v2-handoff.md) (telas e estados). Os tokens
+> vivem em `apps/web/app/globals.css`; as peças do v2 em
+> `apps/web/components/registro/`. O restante deste documento descreve o v1 e
+> fica como histórico.
+
 Status: **proposta**. A identidade visual é a primeira decisão da Fase 0 e nada
 aqui está fechado — o objetivo do documento é dar um ponto de partida concreto
 para aprovar ou recusar, não um manual definitivo.

@@ -4,7 +4,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { MapViewDinamico } from '@/components/map-view-dinamico';
-import { VerificationBadge } from '@/components/verification-badge';
+import {
+  Cornija,
+  FotoPlaceholder,
+  linkTexto,
+  Rotulo,
+  Selo,
+  TagCripto,
+} from '@/components/registro/ui';
 import { buscarEstabelecimento, listarPublicados, tolerante } from '@/lib/api';
 import {
   confirmacaoMaisRecente,
@@ -87,37 +94,63 @@ export default async function EstabelecimentoPage({ params }: Props) {
     ),
   };
 
+  const numeroH2 = 'mt-0 mb-3.5 font-display font-medium text-[24px] leading-[1.1]';
+  const contatos = [
+    estabelecimento.contato.telefone
+      ? {
+          rotulo: estabelecimento.contato.telefone,
+          href: `tel:${estabelecimento.contato.telefone}`,
+        }
+      : null,
+    estabelecimento.contato.site ? { rotulo: 'Site', href: estabelecimento.contato.site } : null,
+    estabelecimento.contato.instagram
+      ? { rotulo: 'Instagram', href: estabelecimento.contato.instagram }
+      : null,
+    estabelecimento.contato.cardapio
+      ? { rotulo: 'Cardápio', href: estabelecimento.contato.cardapio }
+      : null,
+  ].filter((item): item is { rotulo: string; href: string } => item !== null);
+
   return (
-    <article className="mx-auto max-w-3xl px-4 py-10">
+    <article className="mx-auto w-full max-w-[860px] animate-entrada px-7 pt-11 pb-[84px]">
       {/* JSON-LD para o Google entender o local; conteudo proprio, serializado. */}
       <script type="application/ld+json" suppressHydrationWarning>
         {JSON.stringify(jsonLd)}
       </script>
 
-      <nav className="mb-6 text-muted text-sm">
-        <Link href="/estabelecimentos" className="hover:text-foreground">
-          ← Todos os lugares
+      <nav className="mb-6">
+        <Link
+          href="/mapa"
+          className="font-bold text-[11.5px] text-verde uppercase tracking-[0.11em] hover:text-verde-escuro"
+        >
+          ← Voltar ao mapa
         </Link>
       </nav>
 
-      <header className="space-y-3">
-        <p className="text-muted text-sm">
+      <header>
+        <Rotulo className="mb-2.5">
           {rotulos.categoria[estabelecimento.categoria as keyof typeof rotulos.categoria]} ·{' '}
           {estabelecimento.bairro}
           {preco ? ` · ${preco.texto}` : ''}
-        </p>
-        <h1 className="font-display text-4xl leading-tight">{estabelecimento.nome}</h1>
-        <VerificationBadge
+        </Rotulo>
+        <h1 className="mt-0 mb-4 font-display font-medium text-[clamp(32px,5vw,50px)] leading-none">
+          {estabelecimento.nome}
+        </h1>
+        <Selo
           status={estabelecimento.verificacao.status}
           confirmadoEm={confirmadoEm}
           tamanho="md"
         />
+        <Cornija className="mt-6" />
       </header>
 
       {estabelecimento.fotos.length > 0 ? (
-        <div className="mt-8 grid gap-3 sm:grid-cols-2">
+        <div className="mt-8 grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-3">
           {estabelecimento.fotos.map((foto) => (
-            <div key={foto.url} className="relative aspect-[3/2] overflow-hidden rounded-card">
+            <div
+              key={foto.url}
+              className="relative aspect-[3/2] overflow-hidden rounded-[2px] border border-regua"
+            >
               <Image
                 src={foto.url}
                 alt={foto.alt ?? estabelecimento.nome}
@@ -128,37 +161,46 @@ export default async function EstabelecimentoPage({ params }: Props) {
             </div>
           ))}
         </div>
-      ) : null}
+      ) : (
+        <FotoPlaceholder
+          rotulo="[ foto da fachada ]"
+          className="mt-8 h-[180px] border border-regua"
+        />
+      )}
 
       {estabelecimento.descricao ? (
-        <p className="mt-8 text-lg leading-relaxed">{estabelecimento.descricao}</p>
+        <p className="mt-8 mb-0 text-[16.5px] text-tinta-suave leading-[1.72]">
+          {estabelecimento.descricao}
+        </p>
       ) : null}
 
-      <section className="mt-10">
-        <h2 className="font-semibold text-xl">Como pagar em cripto</h2>
+      <section className="mt-11">
+        <h2 className={numeroH2}>Como pagar em cripto</h2>
 
         {estabelecimento.pagamentos.length === 0 ? (
-          <p className="mt-3 text-muted">Nenhuma forma de pagamento registrada ainda.</p>
+          <p className="m-0 text-[15px] text-tinta-media">
+            Nenhuma forma de pagamento registrada ainda.
+          </p>
         ) : (
-          <ul className="mt-4 divide-y divide-border overflow-hidden rounded-card border border-border bg-surface">
+          <ul className="m-0 list-none border-tinta border-t p-0">
             {estabelecimento.pagamentos.map((pagamento) => (
               <li
                 key={`${pagamento.cripto}-${pagamento.metodo}`}
-                className="flex flex-wrap items-center justify-between gap-3 px-4 py-3"
+                className="flex flex-wrap items-center justify-between gap-3 border-regua border-b py-3.5"
               >
-                <div>
-                  <p className="font-medium">
-                    {pagamento.cripto}{' '}
-                    <span className="font-normal text-muted">
-                      · {descreverPagamento(pagamento)}
+                <div className="flex flex-col gap-1.5">
+                  <span className="flex flex-wrap items-center gap-2">
+                    <TagCripto>{pagamento.cripto}</TagCripto>
+                    <span className="text-[14.5px] text-tinta">
+                      {descreverPagamento(pagamento)}
                     </span>
-                  </p>
-                  <p className="text-muted text-sm">
+                  </span>
+                  <span className="font-mono text-[10px] text-tinta-fraca uppercase tracking-[0.12em]">
                     {rotulos.custodia[pagamento.custodia as keyof typeof rotulos.custodia]}
                     {pagamento.observacao ? ` · ${pagamento.observacao}` : ''}
-                  </p>
+                  </span>
                 </div>
-                <VerificationBadge
+                <Selo
                   status={estabelecimento.verificacao.status}
                   confirmadoEm={pagamento.confirmadoEm}
                 />
@@ -169,117 +211,97 @@ export default async function EstabelecimentoPage({ params }: Props) {
       </section>
 
       {estabelecimento.latitude && estabelecimento.longitude ? (
-        <section className="mt-10">
-          <h2 className="mb-3 font-semibold text-xl">No mapa</h2>
-          <MapViewDinamico
-            estabelecimentos={[
-              {
-                id: estabelecimento.id,
-                slug: estabelecimento.slug,
-                nome: estabelecimento.nome,
-                categoria: estabelecimento.categoria,
-                bairro: estabelecimento.bairro,
-                latitude: estabelecimento.latitude,
-                longitude: estabelecimento.longitude,
-                fotoCapa: estabelecimento.fotoCapa,
-                faixaPreco: estabelecimento.faixaPreco,
-                verificacao: estabelecimento.verificacao,
-                pagamentos: estabelecimento.pagamentos,
-              },
-            ]}
-          />
+        <section className="mt-11">
+          <h2 className={numeroH2}>No mapa</h2>
+          <div className="mx-auto max-w-[520px]">
+            <MapViewDinamico
+              estabelecimentos={[
+                {
+                  id: estabelecimento.id,
+                  slug: estabelecimento.slug,
+                  nome: estabelecimento.nome,
+                  categoria: estabelecimento.categoria,
+                  bairro: estabelecimento.bairro,
+                  latitude: estabelecimento.latitude,
+                  longitude: estabelecimento.longitude,
+                  fotoCapa: estabelecimento.fotoCapa,
+                  faixaPreco: estabelecimento.faixaPreco,
+                  verificacao: estabelecimento.verificacao,
+                  pagamentos: estabelecimento.pagamentos,
+                },
+              ]}
+              selecionadoId={estabelecimento.id}
+              enquadrarNosPins
+            />
+          </div>
         </section>
       ) : null}
 
-      <section className="mt-10 grid gap-8 sm:grid-cols-2">
+      <section className="mt-11 grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-8">
         <div>
-          <h2 className="font-semibold text-xl">Endereço</h2>
-          <p className="mt-3 text-muted">{enderecoEmLinha(estabelecimento.endereco)}</p>
+          <h2 className={numeroH2}>Endereço</h2>
+          <p className="mt-0 mb-4 text-[15px] text-tinta-media leading-[1.6]">
+            {enderecoEmLinha(estabelecimento.endereco)}
+          </p>
           <a
             href={urlComoChegar(estabelecimento)}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-3 inline-flex rounded-control bg-primary px-4 py-2 font-medium text-sm text-white hover:bg-primary-hover"
+            className="inline-flex rounded-[2px] bg-verde px-5 py-3 font-bold text-[12px] text-creme uppercase tracking-[0.11em] hover:bg-verde-escuro hover:text-creme hover:no-underline"
           >
             Como chegar
           </a>
         </div>
 
-        <div>
-          <h2 className="font-semibold text-xl">Contato</h2>
-          <ul className="mt-3 space-y-1 text-sm">
-            {estabelecimento.contato.telefone ? (
-              <li>
-                <a href={`tel:${estabelecimento.contato.telefone}`} className="hover:text-primary">
-                  {estabelecimento.contato.telefone}
-                </a>
-              </li>
-            ) : null}
-            {estabelecimento.contato.site ? (
-              <li>
-                <a
-                  href={estabelecimento.contato.site}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-primary"
-                >
-                  Site
-                </a>
-              </li>
-            ) : null}
-            {estabelecimento.contato.instagram ? (
-              <li>
-                <a
-                  href={estabelecimento.contato.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-primary"
-                >
-                  Instagram
-                </a>
-              </li>
-            ) : null}
-            {estabelecimento.contato.cardapio ? (
-              <li>
-                <a
-                  href={estabelecimento.contato.cardapio}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-primary"
-                >
-                  Cardápio
-                </a>
-              </li>
-            ) : null}
-          </ul>
-        </div>
+        {contatos.length > 0 ? (
+          <div>
+            <h2 className={numeroH2}>Contato</h2>
+            <ul className="m-0 flex list-none flex-col gap-1.5 p-0 text-[15px]">
+              {contatos.map((contato) => (
+                <li key={contato.href}>
+                  <a
+                    href={contato.href}
+                    target={contato.href.startsWith('tel:') ? undefined : '_blank'}
+                    rel="noopener noreferrer"
+                    className={linkTexto}
+                  >
+                    {contato.rotulo}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </section>
 
       {horarios.length > 0 ? (
-        <section className="mt-10">
-          <h2 className="font-semibold text-xl">Horário</h2>
-          <dl className="mt-3 divide-y divide-border overflow-hidden rounded-card border border-border bg-surface text-sm">
+        <section className="mt-11">
+          <h2 className={numeroH2}>Horário</h2>
+          <dl className="m-0 border-tinta border-t text-[14.5px]">
             {horarios.map((dia) => (
-              <div key={dia.nome} className="flex justify-between gap-4 px-4 py-2">
-                <dt className="text-muted">{dia.nome}</dt>
-                <dd>{dia.texto}</dd>
+              <div
+                key={dia.nome}
+                className="flex justify-between gap-4 border-regua border-b py-2.5"
+              >
+                <dt className="font-mono text-[10.5px] text-tinta-fraca uppercase tracking-[0.12em]">
+                  {dia.nome}
+                </dt>
+                <dd className="m-0">{dia.texto}</dd>
               </div>
             ))}
           </dl>
         </section>
       ) : null}
 
-      <section className="mt-10 rounded-card border border-border border-dashed bg-surface p-5 text-sm">
-        <p className="text-muted">
-          Alguma informação está errada ou desatualizada?{' '}
-          <Link
-            href={`/sugerir?tipo=reporte_erro&estabelecimento=${estabelecimento.slug}`}
-            className="text-primary hover:underline"
-          >
-            Reportar um erro
-          </Link>
-          .
-        </p>
+      <section className="mt-11 rounded-[2px] border border-regua border-dashed bg-papel-claro px-5 py-4 text-[14.5px] text-tinta-media">
+        Alguma informação está errada ou desatualizada?{' '}
+        <Link
+          href={`/indicar?tipo=reporte_erro&estabelecimento=${estabelecimento.slug}`}
+          className={linkTexto}
+        >
+          Reportar um erro
+        </Link>
+        .
       </section>
     </article>
   );

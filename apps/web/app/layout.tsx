@@ -1,18 +1,25 @@
 import type { Metadata } from 'next';
-import { Instrument_Serif, Inter } from 'next/font/google';
+import { Archivo, Bodoni_Moda, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { SITE_URL as siteUrl } from '@/lib/env';
 
-const inter = Inter({
+const archivo = Archivo({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-archivo',
   display: 'swap',
 });
 
-const instrumentSerif = Instrument_Serif({
+const bodoni = Bodoni_Moda({
   subsets: ['latin'],
-  weight: '400',
-  variable: '--font-instrument-serif',
+  style: ['normal', 'italic'],
+  axes: ['opsz'],
+  variable: '--font-bodoni',
+  display: 'swap',
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains',
   display: 'swap',
 });
 
@@ -35,7 +42,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${instrumentSerif.variable}`}>
+    <html lang="pt-BR" className={`${archivo.variable} ${bodoni.variable} ${jetbrains.variable}`}>
       <body className="bg-background text-foreground">{children}</body>
     </html>
   );

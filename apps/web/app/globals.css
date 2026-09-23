@@ -1,26 +1,58 @@
 @import 'tailwindcss';
 
 /*
- * Tokens de docs/05-design.md: base neutra quente, acento verde pinheiro.
- * Contraste conferido para AA (primary sobre background ~8:1, muted ~5:1).
+ * Tokens do v2 "almanaque civil de Curitiba" (docs/05-design.md): papel de
+ * cal, tinta, verde araucaria, ocre do Paco, terracota. Sem sombra, raio de
+ * 2px em quase tudo. Os nomes antigos (background, surface, primary...) foram
+ * mantidos para o painel /admin herdar a paleta sem reescrita.
  */
 @theme {
-  --color-background: #fbfaf8;
-  --color-surface: #ffffff;
-  --color-border: #e7e3dc;
-  --color-foreground: #1a1a18;
-  --color-muted: #6b6862;
-  --color-primary: #0e5c43;
-  --color-primary-hover: #0a4635;
-  --color-verified: #0e5c43;
-  --color-community: #b4751a;
+  --color-background: #efe9dd;
+  --color-surface: #fbf8f1;
+  --color-border: #c9bfa8;
+  --color-foreground: #1b1a16;
+  --color-muted: #6a6254;
+  --color-primary: #0f6b4f;
+  --color-primary-hover: #0a4a36;
+  --color-verified: #0f6b4f;
+  --color-community: #8a5f14;
   --color-danger: #9b2c2c;
 
-  --radius-card: 12px;
-  --radius-control: 8px;
+  --color-papel: #efe9dd;
+  --color-papel-claro: #fbf8f1;
+  --color-papel-quente: #e7dfcd;
+  --color-tinta: #1b1a16;
+  --color-tinta-media: #4a453b;
+  --color-tinta-suave: #3a3630;
+  --color-tinta-fraca: #6a6254;
+  --color-regua: #c9bfa8;
+  --color-pinheiro: #16261f;
+  --color-verde: #0f6b4f;
+  --color-verde-escuro: #0a4a36;
+  --color-ocre: #c9902c;
+  --color-ocre-escuro: #8a5f14;
+  --color-terracota: #8c2f1b;
+  --color-creme: #f3ede0;
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-instrument-serif), Georgia, serif;
+  --radius-card: 2px;
+  --radius-control: 2px;
+
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bodoni), Georgia, serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+
+  --animate-entrada: entrada 0.5s ease;
+
+  @keyframes entrada {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 html {
@@ -34,10 +66,137 @@ body {
 }
 
 ::selection {
-  background-color: color-mix(in srgb, var(--color-primary) 18%, transparent);
+  background-color: var(--color-ocre);
+  color: var(--color-tinta);
 }
 
 :focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-entrada {
+    animation: none;
+  }
+}
+
+/* Calcada portuguesa (Largo da Ordem): xadrez em losango, modulo de 11px. */
+.calcada {
+  height: 11px;
+  background-color: var(--color-papel);
+  background-image:
+    linear-gradient(45deg, var(--color-tinta) 25%, transparent 25%, transparent 75%, var(--color-tinta) 75%),
+    linear-gradient(45deg, var(--color-tinta) 25%, transparent 25%, transparent 75%, var(--color-tinta) 75%);
+  background-size: 11px 11px;
+  background-position: 0 0, 5.5px 5.5px;
+}
+
+.calcada-escura {
+  height: 11px;
+  background-color: #27362e;
+  background-image:
+    linear-gradient(45deg, var(--color-papel) 25%, transparent 25%, transparent 75%, var(--color-papel) 75%),
+    linear-gradient(45deg, var(--color-papel) 25%, transparent 25%, transparent 75%, var(--color-papel) 75%);
+  background-size: 11px 11px;
+  background-position: 0 0, 5.5px 5.5px;
+}
+
+/* Placeholder de foto: listrado com rotulo mono entre colchetes. */
+.foto-listrada {
+  background: repeating-linear-gradient(135deg, #e2dac6 0 9px, #d6ccb4 9px 18px);
+}
+
+/* Vidraca dos quatro vaos: vidro verde com montantes de ferro creme. */
+.vidraca {
+  background-image:
+    repeating-linear-gradient(90deg, rgba(239, 233, 221, 0.5) 0 2px, transparent 2px 30px),
+    repeating-linear-gradient(0deg, rgba(239, 233, 221, 0.28) 0 2px, transparent 2px 34px);
+}
+
+/* Grade creme sobre o verde-pinheiro (arco central do portal). */
+.grade-creme {
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 21px, rgba(239, 233, 221, 0.11) 21px 22px),
+    repeating-linear-gradient(90deg, transparent 0 21px, rgba(239, 233, 221, 0.11) 21px 22px);
+}
+
+.grade-portal {
+  background-image: repeating-linear-gradient(90deg, var(--color-pinheiro) 0 2px, transparent 2px 13px);
+}
+
+/* Pinhao: o pin do mapa (border-radius 50% 50% 50% 0 girado 45deg). */
+.pinhao {
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(45deg);
+}
+
+/* Mapa real (Leaflet) dentro da moldura em arco. */
+.mapa-registro .leaflet-container {
+  background: var(--color-pinheiro);
+  font-family: var(--font-sans);
+}
+
+.mapa-registro .leaflet-tile-pane {
+  filter: grayscale(0.55) sepia(0.28) contrast(0.96);
+}
+
+.mapa-registro .leaflet-control-zoom a {
+  border-radius: 2px !important;
+  color: var(--color-tinta);
+  background: var(--color-papel-claro);
+}
+
+.mapa-registro .leaflet-bar {
+  border: 1px solid var(--color-tinta);
+  border-radius: 2px;
+  box-shadow: none;
+}
+
+.mapa-registro .leaflet-popup-content-wrapper {
+  background: var(--color-papel-claro);
+  border: 1px solid var(--color-tinta);
+  border-radius: 2px;
+  box-shadow: none;
+  color: var(--color-tinta);
+}
+
+.mapa-registro .leaflet-popup-content {
+  margin: 9px 13px;
+}
+
+.mapa-registro .leaflet-popup-tip {
+  background: var(--color-papel-claro);
+  border: 1px solid var(--color-tinta);
+  box-shadow: none;
+}
+
+.mapa-registro .leaflet-control-attribution {
+  background: rgba(251, 248, 241, 0.85);
+  font-family: var(--font-mono);
+  font-size: 9px;
+}
+
+.pin-pinhao {
+  background: transparent;
+  border: none;
+}
+
+.marker-cluster-registro {
+  background: transparent;
+}
+
+.marker-cluster-registro span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 2px;
+  background: var(--color-pinheiro);
+  border: 1.5px solid var(--color-papel);
+  color: var(--color-papel);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
 }
