@@ -1,5 +1,13 @@
+import { timingSafeEqual } from 'node:crypto';
 import { revalidateTag } from 'next/cache';
 import { type NextRequest, NextResponse } from 'next/server';
+
+/** Comparacao em tempo constante: o tempo de resposta nao pode vazar quanto do segredo bateu. */
+function segredosIguais(a: string, b: string): boolean {
+  const bufA = Buffer.from(a);
+  const bufB = Buffer.from(b);
+  return bufA.length === bufB.length && timingSafeEqual(bufA, bufB);
+}
 
 /**
  * Webhook chamado pela API quando um estabelecimento e publicado, editado ou
@@ -8,8 +16,9 @@ import { type NextRequest, NextResponse } from 'next/server';
  */
 export async function POST(request: NextRequest) {
   const segredo = process.env.REVALIDATE_SECRET;
+  const recebido = request.headers.get('x-revalidate-secret');
 
-  if (!segredo || request.headers.get('x-revalidate-secret') !== segredo) {
+  if (!segredo || !recebido || !segredosIguais(recebido, segredo)) {
     return NextResponse.json(
       { error: { code: 'UNAUTHORIZED', message: 'Segredo inválido' } },
       { status: 401 },

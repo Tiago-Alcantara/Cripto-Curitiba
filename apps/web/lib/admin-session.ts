@@ -1,8 +1,25 @@
 import { cookies } from 'next/headers';
+import type { NextRequest } from 'next/server';
 import { API_URL } from './env';
 
 export const COOKIE_ADMIN = process.env.ADMIN_COOKIE_NAME ?? 'cc_admin';
 export { API_URL } from './env';
+
+/**
+ * Repassa o IP do visitante para a API junto de um segredo compartilhado
+ * (`PROXY_TRUST_SECRET`, o mesmo dos dois lados) para que ela distinga uma
+ * chamada legitima do BFF de alguem forjando `X-Forwarded-For` direto na API.
+ * Sem o segredo configurado, nao envia nada: a API cai no IP da propria
+ * conexao.
+ */
+export function headersDeIpConfiavel(request: NextRequest): Record<string, string> {
+  const segredo = process.env.PROXY_TRUST_SECRET;
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
+
+  if (!segredo || !ip) return {};
+
+  return { 'x-forwarded-client-ip': ip, 'x-proxy-trust-secret': segredo };
+}
 
 /**
  * O token do painel vive em cookie httpOnly na origem da Vercel e nunca chega

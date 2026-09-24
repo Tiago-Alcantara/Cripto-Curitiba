@@ -12,6 +12,7 @@ import { suggestionsRoutes } from './modules/suggestions/suggestions.routes.js';
 import { authPlugin } from './plugins/auth.js';
 import { errorHandler } from './plugins/error-handler.js';
 import { prismaPlugin } from './plugins/prisma.js';
+import { ipReal } from './shared/client-ip.js';
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -32,7 +33,10 @@ export async function buildApp(
           ? { target: 'pino-pretty', options: { colorize: true } }
           : undefined,
     },
-    trustProxy: true,
+    // So confia no hop imediato (o Caddy da propria API): impede que qualquer
+    // chamador forje X-Forwarded-For para escapar do rate limit por IP.
+    // Equivalente a `trustProxy: 1`, mas o tipo do Fastify 5 nao aceita number.
+    trustProxy: (_endereco, hop) => hop === 0,
   });
 
   app.decorate('config', env);
@@ -43,7 +47,7 @@ export async function buildApp(
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
 
-  await app.register(helmet, { contentSecurityPolicy: false });
+  await app.register(helmet);
   await app.register(cors, {
     origin: parseCorsOrigins(env.CORS_ORIGINS),
     // Nenhuma requisicao autenticada sai do browser direto para a API: o painel
@@ -54,6 +58,7 @@ export async function buildApp(
     global: true,
     max: 120,
     timeWindow: '1 minute',
+    keyGenerator: (request) => ipReal(request, env.PROXY_TRUST_SECRET),
     // Em teste o limite so atrapalha; as rotas sensiveis tem limite proprio.
     enableDraftSpec: true,
     skipOnError: true,

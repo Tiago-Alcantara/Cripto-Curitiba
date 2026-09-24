@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { API_URL, COOKIE_ADMIN, opcoesCookie } from '@/lib/admin-session';
+import { API_URL, COOKIE_ADMIN, headersDeIpConfiavel, opcoesCookie } from '@/lib/admin-session';
 
 const SETE_DIAS = 60 * 60 * 24 * 7;
 
@@ -11,9 +11,7 @@ export async function POST(request: NextRequest) {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-      ...(request.headers.get('x-forwarded-for')
-        ? { 'x-forwarded-for': request.headers.get('x-forwarded-for') as string }
-        : {}),
+      ...headersDeIpConfiavel(request),
     },
     body: JSON.stringify(credenciais),
   }).catch(() => null);
