@@ -72,6 +72,25 @@ body {
   font-weight: 500;
 }
 
+/*
+ * Bodoni Moda e uma fonte variavel com eixo optico (opsz): no automatico
+ * (font-optical-sizing: auto), o navegador escolhe um corte mais fino nos
+ * tamanhos de titulo, e as hastes ficam capilares. Trava o eixo num valor
+ * baixo (a mesma logica do design v2, ver docs/design/v2-handoff.md) pra
+ * sempre pegar o corte mais encorpado da fonte, independente do tamanho
+ * renderizado. .font-display e a classe usada em titulos, logotipo e
+ * numeros grandes (Contador da home); h1-h3 cobrem qualquer caso que nao
+ * tenha a classe.
+ */
+h1,
+h2,
+h3,
+.font-display {
+  font-optical-sizing: none;
+  font-variation-settings: 'opsz' 11;
+  font-weight: 600;
+}
+
 ::selection {
   background-color: var(--color-ocre);
   color: var(--color-tinta);
