@@ -37,14 +37,6 @@ export function dataParaIso(data: string): string | undefined {
  */
 export const POSTS: Post[] = [
   {
-    tag: 'Comunidade',
-    titulo: 'Encontro cripto no Largo da Ordem reúne 40 pessoas',
-    resumo:
-      'O primeiro meetup presencial da CriptoCuritiba discutiu adoção local, taxas e apresentou quatro estabelecimentos novos para o registro.',
-    data: '12 set 2026',
-    rotuloImagem: 'foto: Largo da Ordem',
-  },
-  {
     tag: 'Guia',
     titulo: 'Como funciona o selo de verificação',
     resumo:
