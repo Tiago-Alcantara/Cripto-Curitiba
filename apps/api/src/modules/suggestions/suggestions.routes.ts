@@ -1,6 +1,7 @@
 import { erroSchema, novaSugestaoSchema, sugestaoCriadaSchema } from '@cripto/shared';
 import type { FastifyInstance } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
+import { ipReal } from '../../shared/client-ip.js';
 import { criarSuggestionsRepository } from './suggestions.repository.js';
 import { criarSuggestionsService } from './suggestions.service.js';
 import { criarVerificadorTurnstile } from './turnstile.js';
@@ -20,6 +21,7 @@ export async function suggestionsRoutes(app: FastifyInstance) {
         rateLimit: {
           max: 5,
           timeWindow: '1 hour',
+          keyGenerator: (request) => ipReal(request, app.config.PROXY_TRUST_SECRET),
         },
       },
       schema: {
@@ -29,7 +31,7 @@ export async function suggestionsRoutes(app: FastifyInstance) {
     },
     async (request, reply) => {
       const resultado = await service.criar(request.body, {
-        ip: request.ip,
+        ip: ipReal(request, app.config.PROXY_TRUST_SECRET),
         userAgent: request.headers['user-agent'],
       });
 

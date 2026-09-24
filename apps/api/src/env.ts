@@ -13,6 +13,8 @@ const envSchema = z.object({
   JWT_SECRET: z.string().min(32).optional(),
   JWT_EXPIRES_IN: z.string().default('7d'),
   TURNSTILE_SECRET_KEY: z.string().optional(),
+  /** Segredo compartilhado com o BFF do Next para confiar no IP que ele repassa. */
+  PROXY_TRUST_SECRET: z.string().min(16).optional(),
   UPLOADS_DIR: z.string().default('./uploads'),
   PUBLIC_UPLOADS_URL: z.string().default('http://localhost:3333/uploads'),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
@@ -73,6 +75,13 @@ export function avisosDeConfiguracao(env: Env): string[] {
     avisos.push(
       'TURNSTILE_SECRET_KEY ausente: o formulario de sugestao fica protegido ' +
         'apenas por honeypot e rate limit',
+    );
+  }
+
+  if (!env.PROXY_TRUST_SECRET) {
+    avisos.push(
+      'PROXY_TRUST_SECRET ausente: o limite de sugestoes e o rate limit de login ' +
+        'passam a valer por instancia do BFF, nao por visitante',
     );
   }
 

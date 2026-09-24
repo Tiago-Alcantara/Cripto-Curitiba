@@ -2,6 +2,7 @@ import { erroSchema } from '@cripto/shared';
 import type { FastifyInstance } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
+import { ipReal } from '../../shared/client-ip.js';
 import { criarAuthService } from './auth.service.js';
 
 const usuarioSchema = z.object({
@@ -22,7 +23,13 @@ export async function authRoutes(app: FastifyInstance) {
   rotas.post(
     '/admin/auth/login',
     {
-      config: { rateLimit: { max: 5, timeWindow: '15 minutes' } },
+      config: {
+        rateLimit: {
+          max: 5,
+          timeWindow: '15 minutes',
+          keyGenerator: (request) => ipReal(request, app.config.PROXY_TRUST_SECRET),
+        },
+      },
       schema: {
         body: z.object({ email: z.email(), senha: z.string().min(1) }),
         response: {

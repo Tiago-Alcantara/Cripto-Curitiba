@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { headersDeIpConfiavel } from '@/lib/admin-session';
 import { API_URL } from '@/lib/env';
 
 /**
@@ -10,14 +11,13 @@ import { API_URL } from '@/lib/env';
  */
 export async function POST(request: NextRequest) {
   const corpo = await request.text();
-  const ip = request.headers.get('x-forwarded-for') ?? request.headers.get('x-real-ip') ?? '';
 
   try {
     const resposta = await fetch(`${API_URL}/sugestoes`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        ...(ip ? { 'x-forwarded-for': ip } : {}),
+        ...headersDeIpConfiavel(request),
       },
       body: corpo,
     });
