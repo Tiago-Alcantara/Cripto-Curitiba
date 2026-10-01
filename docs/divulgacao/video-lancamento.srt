@@ -1,0 +1,140 @@
+1
+00:00:01,550 --> 00:00:03,897
+Você tem cripto e mora em Curitiba?
+
+2
+00:00:03,897 --> 00:00:06,290
+Ou está só de passagem pela cidade?
+
+3
+00:00:06,290 --> 00:00:10,424
+Então esse vídeo é pra você: o Cripto Curitiba está no ar.
+
+4
+00:00:11,074 --> 00:00:15,151
+Quem usa cripto aqui sempre esbarra na mesma pergunta: onde dá pra gastar?
+
+5
+00:00:15,151 --> 00:00:19,123
+Os mapas que existem são globais, genéricos e desatualizados.
+
+6
+00:00:19,123 --> 00:00:26,247
+E quase nunca dizem o que importa na hora de pagar: qual moeda o lugar aceita, por qual rede, e se essa informação ainda vale hoje.
+
+7
+00:00:27,297 --> 00:00:30,201
+O Cripto Curitiba nasceu pra resolver isso.
+
+8
+00:00:30,201 --> 00:00:33,569
+É um registro vivo da cidade, mantido por quem mora aqui:
+
+9
+00:00:33,569 --> 00:00:39,727
+cafés, bares, restaurantes, lojas e serviços que aceitam Bitcoin e outras criptomoedas.
+
+10
+00:00:40,377 --> 00:00:44,096
+E ele é diferente de um diretório qualquer por quatro motivos.
+
+11
+00:00:44,496 --> 00:00:51,264
+Primeiro, o selo de verificação: cada local mostra se foi verificado pela equipe ou reportado pela comunidade.
+
+12
+00:00:51,664 --> 00:00:56,802
+Segundo, a data de confirmação, porque informação velha é o que mata um diretório de cripto.
+
+13
+00:00:57,202 --> 00:01:02,793
+Terceiro, a curadoria de vizinho: qualquer pessoa indica, e a equipe confirma antes de publicar.
+
+14
+00:01:03,193 --> 00:01:07,632
+E quarto: é só Curitiba. Só as ruas e os bairros que você conhece.
+
+15
+00:01:08,082 --> 00:01:12,078
+Logo na página inicial você já encontra os locais verificados em campo.
+
+16
+00:01:12,078 --> 00:01:17,072
+E repara no marcador do mapa: é um pinhão, a semente da araucária, símbolo do Paraná.
+
+17
+00:01:18,122 --> 00:01:20,330
+No mapa está o registro completo.
+
+18
+00:01:20,330 --> 00:01:23,873
+Dá pra filtrar por ramo, como café, bar ou restaurante.
+
+19
+00:01:24,873 --> 00:01:28,546
+Por moeda, ou só quem aceita pagamento pela rede Lightning.
+
+20
+00:01:29,346 --> 00:01:33,159
+E se quiser ter certeza, é só marcar: só verificados.
+
+21
+00:01:33,709 --> 00:01:36,685
+Também dá pra buscar pelo nome ou pelo bairro.
+
+22
+00:01:38,085 --> 00:01:43,778
+Escolheu um local? Ele aparece em destaque, com as moedas aceitas e o selo de confiança.
+
+23
+00:01:45,028 --> 00:01:48,060
+Na ficha completa está o que importa na hora de pagar.
+
+24
+00:01:48,060 --> 00:01:54,798
+Não basta dizer que aceita Bitcoin: mostramos a rede, a forma de pagamento e a data em que cada uma foi confirmada.
+
+25
+00:01:55,398 --> 00:02:01,520
+Tem também o endereço, o botão “como chegar”, e um atalho pra reportar um erro, caso alguma coisa tenha mudado.
+
+26
+00:02:02,170 --> 00:02:07,596
+Conhece um lugar que aceita cripto e ainda não está no mapa? Indicar leva dois minutos.
+
+27
+00:02:07,996 --> 00:02:12,006
+Você informa o nome, o ramo, o bairro e as moedas aceitas.
+
+28
+00:02:15,806 --> 00:02:20,407
+Toda indicação passa por verificação manual antes de entrar no registro.
+
+29
+00:02:21,457 --> 00:02:27,369
+E pra ficar claro: o Cripto Curitiba não intermedia pagamentos e não custodia cripto de ninguém.
+
+30
+00:02:27,369 --> 00:02:30,935
+Não é recomendação financeira, e não cobra pra listar ninguém.
+
+31
+00:02:30,935 --> 00:02:34,979
+A gente só mostra onde, em Curitiba, você pode pagar com cripto.
+
+32
+00:02:36,029 --> 00:02:38,457
+O site já está no ar e pronto pra usar.
+
+33
+00:02:38,457 --> 00:02:44,868
+Acesse, explore o mapa, e se você conhece um lugar que aceita cripto, ou tem um negócio que aceita, indique.
+
+34
+00:02:44,868 --> 00:02:48,936
+Quanto mais gente contribuir, mais completo fica o mapa da cidade.
+
+35
+00:02:49,336 --> 00:02:53,597
+Cripto Curitiba: o lugar pra descobrir onde usar cripto em Curitiba.
+

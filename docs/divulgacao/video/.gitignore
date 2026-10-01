@@ -1,0 +1,14 @@
+# tudo aqui e gerado pelos scripts (ver docs/divulgacao/README.md)
+node_modules/
+package-lock.json
+modelos/
+fontes/
+assets/
+audio/
+stills/
+narracao.wav
+timing.json
+captura.json
+timeline.json
+legendas.srt
+*.mp4

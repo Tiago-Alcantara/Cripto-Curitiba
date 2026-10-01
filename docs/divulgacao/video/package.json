@@ -1,0 +1,15 @@
+{
+  "name": "video-lancamento",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "fontes": "node fontes.mjs",
+    "narracao": "python3 narracao.py",
+    "captura": "node captura.mjs && python3 recorta.py",
+    "stills": "node render.mjs --stills 5,47,83,111,130,173",
+    "video": "node render.mjs --saida video-lancamento.mp4"
+  },
+  "devDependencies": {
+    "playwright": "1.56.1"
+  }
+}

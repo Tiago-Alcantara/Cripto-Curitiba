@@ -1,0 +1,191 @@
+[
+  {
+    "id": "abertura",
+    "frases": [
+      ["Você tem cripto e mora em Curitiba?", null],
+      ["Ou está só de passagem pela cidade?", null],
+      [
+        "Então esse vídeo é pra você: o Cripto Curitiba está no ar.",
+        "Então esse vídeo é pra você: o site Cripto Curitiba está no ar."
+      ]
+    ],
+    "pre": 1.6,
+    "post": 0.6
+  },
+  {
+    "id": "problema",
+    "frases": [
+      ["Quem usa cripto aqui sempre esbarra na mesma pergunta: onde dá pra gastar?", null],
+      ["Os mapas que existem são globais, genéricos e desatualizados.", null],
+      [
+        "E quase nunca dizem o que importa na hora de pagar: qual moeda o lugar aceita, por qual rede, e se essa informação ainda vale hoje.",
+        null
+      ]
+    ],
+    "pre": 0.6,
+    "post": 0.8
+  },
+  {
+    "id": "solucao",
+    "frases": [
+      [
+        "O Cripto Curitiba nasceu pra resolver isso.",
+        "O site Cripto Curitiba nasceu pra resolver isso."
+      ],
+      ["É um registro vivo da cidade, mantido por quem mora aqui:", null],
+      [
+        "cafés, bares, restaurantes, lojas e serviços que aceitam Bitcoin e outras criptomoedas.",
+        "cafés, bares, restaurantes, lojas e serviços que aceitam {BTC} e outras criptomoedas."
+      ]
+    ],
+    "pre": 0.8,
+    "post": 0.6
+  },
+  {
+    "id": "diferenciais",
+    "frases": [
+      ["E ele é diferente de um diretório qualquer por quatro motivos.", null],
+      [
+        "Primeiro, o selo de verificação: cada local mostra se foi verificado pela equipe ou reportado pela comunidade.",
+        null
+      ],
+      [
+        "Segundo, a data de confirmação, porque informação velha é o que mata um diretório de cripto.",
+        null
+      ],
+      [
+        "Terceiro, a curadoria de vizinho: qualquer pessoa indica, e a equipe confirma antes de publicar.",
+        null
+      ],
+      ["E quarto: é só Curitiba. Só as ruas e os bairros que você conhece.", null]
+    ],
+    "pre": 0.6,
+    "post": 0.6,
+    "gapAfter": {
+      "0": 0.6,
+      "1": 0.6,
+      "2": 0.6,
+      "3": 0.6
+    }
+  },
+  {
+    "id": "destaques",
+    "frases": [
+      ["Logo na página inicial você já encontra os locais verificados em campo.", null],
+      [
+        "E repara no marcador do mapa: é um pinhão, a semente da araucária, símbolo do Paraná.",
+        null
+      ]
+    ],
+    "pre": 0.4,
+    "post": 0.6
+  },
+  {
+    "id": "mapa",
+    "frases": [
+      ["No mapa está o registro completo.", null],
+      [
+        "Dá pra filtrar por ramo, como café, bar ou restaurante.",
+        "Dá pra filtrar por ramo, como café, bar, ou restaurante."
+      ],
+      [
+        "Por moeda, ou só quem aceita pagamento pela rede Lightning.",
+        "Por moeda, ou só quem aceita pagamento pela rede {LN}."
+      ],
+      ["E se quiser ter certeza, é só marcar: só verificados.", null]
+    ],
+    "pre": 1.0,
+    "post": 0.5,
+    "gapAfter": {
+      "1": 1.2,
+      "2": 1.0
+    }
+  },
+  {
+    "id": "busca",
+    "frases": [
+      [
+        "Também dá pra buscar pelo nome ou pelo bairro.",
+        "Também dá pra buscar pelo nome, ou pelo bairro."
+      ],
+      [
+        "Escolheu um local? Ele aparece em destaque, com as moedas aceitas e o selo de confiança.",
+        null
+      ]
+    ],
+    "pre": 0.6,
+    "post": 1.0,
+    "gapAfter": {
+      "0": 1.6
+    }
+  },
+  {
+    "id": "ficha",
+    "frases": [
+      ["Na ficha completa está o que importa na hora de pagar.", null],
+      [
+        "Não basta dizer que aceita Bitcoin: mostramos a rede, a forma de pagamento e a data em que cada uma foi confirmada.",
+        "Não basta dizer que aceita {BTC}: mostramos a rede, a forma de pagamento e a data em que cada uma foi confirmada."
+      ],
+      [
+        "Tem também o endereço, o botão “como chegar”, e um atalho pra reportar um erro, caso alguma coisa tenha mudado.",
+        "Tem também o endereço, o botão como chegar, e um atalho pra reportar um erro, caso alguma coisa tenha mudado."
+      ]
+    ],
+    "pre": 0.8,
+    "post": 0.6,
+    "gapAfter": {
+      "1": 0.8
+    }
+  },
+  {
+    "id": "indicar",
+    "frases": [
+      [
+        "Conhece um lugar que aceita cripto e ainda não está no mapa? Indicar leva dois minutos.",
+        null
+      ],
+      ["Você informa o nome, o ramo, o bairro e as moedas aceitas.", null],
+      ["Toda indicação passa por verificação manual antes de entrar no registro.", null]
+    ],
+    "pre": 0.6,
+    "post": 0.8,
+    "gapAfter": {
+      "0": 0.6,
+      "1": 4.0
+    }
+  },
+  {
+    "id": "transparencia",
+    "frases": [
+      [
+        "E pra ficar claro: o Cripto Curitiba não intermedia pagamentos e não custodia cripto de ninguém.",
+        "E pra ficar claro: o site Cripto Curitiba não intermedia pagamentos e não custodia cripto de ninguém."
+      ],
+      ["Não é recomendação financeira, e não cobra pra listar ninguém.", null],
+      ["A gente só mostra onde, em Curitiba, você pode pagar com cripto.", null]
+    ],
+    "pre": 0.8,
+    "post": 0.8
+  },
+  {
+    "id": "encerramento",
+    "frases": [
+      ["O site já está no ar e pronto pra usar.", null],
+      [
+        "Acesse, explore o mapa, e se você conhece um lugar que aceita cripto, ou tem um negócio que aceita, indique.",
+        null
+      ],
+      ["Quanto mais gente contribuir, mais completo fica o mapa da cidade.", null],
+      [
+        "Cripto Curitiba: o lugar pra descobrir onde usar cripto em Curitiba.",
+        "Cripto Curitiba. O lugar pra descobrir onde usar cripto em Curitiba."
+      ]
+    ],
+    "pre": 0.8,
+    "post": 3.0,
+    "gapAfter": {
+      "2": 0.6
+    }
+  }
+]

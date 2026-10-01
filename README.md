@@ -142,6 +142,7 @@ Caminho alternativo sem Coolify (VPS + PM2 + Caddy manual) em
 | [docs/08-deploy-coolify.md](docs/08-deploy-coolify.md) | Deploy em uso: API e Postgres no Coolify, frontend na Vercel |
 | [docs/07-roadmap.md](docs/07-roadmap.md) | Fases do MVP, o que está pronto, pendências conhecidas |
 | [docs/adr/](docs/adr/) | Decisões arquiteturais registradas (ADRs) |
+| [docs/divulgacao/](docs/divulgacao/) | Vídeo de lançamento: roteiro, legenda e o gerador que grava o site e monta o vídeo |
 
 ## Status
 
