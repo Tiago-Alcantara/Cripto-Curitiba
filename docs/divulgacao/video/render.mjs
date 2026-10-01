@@ -477,7 +477,7 @@ const ff = spawn(
     '-preset',
     opt('--preset', 'slow'),
     '-crf',
-    opt('--crf', '18'),
+    opt('--crf', '23'),
     '-pix_fmt',
     'yuv420p',
     '-r',
