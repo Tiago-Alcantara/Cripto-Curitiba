@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>brag · Cripto Curitiba</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="site.css">
+<style>
+  :root {
+    --font-archivo: 'Archivo';
+    --font-bodoni: 'Bodoni Moda';
+    --font-jetbrains: 'JetBrains Mono';
+  }
+  /* fora de qualquer @layer, entao vence as utilities do Tailwind sem !important */
+  *, *::before, *::after { animation: none; transition: none; }
+  html, body { margin: 0; padding: 0; width: 1920px; height: 1080px; overflow: hidden; }
+  #stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--color-papel); }
+  .scene { position: absolute; inset: 0; display: none; }
+  .abs { position: absolute; }
+  .will { will-change: transform, opacity; }
+  .palavra { display: inline-block; }
+  #cursor { position: absolute; left: 0; top: 0; width: 46px; height: 46px; z-index: 50; display: none; }
+  #ripple { position: absolute; width: 70px; height: 70px; margin: -35px 0 0 -35px; border: 3px solid var(--color-ocre); border-radius: 50%; z-index: 49; display: none; }
+  /* a ficha reaproveita o markup real; aqui so tiramos os ids duplicados de cena */
+  .ficha-estado { position: absolute; left: 0; top: 0; width: 624px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- 1 · GANCHO -->
+  <section class="scene" id="s1">
+    <div id="s1c" class="abs will" style="inset:0">
+      <h1 class="font-display abs" style="left:0;right:0;top:250px;margin:0;text-align:center;font-size:232px;line-height:.98;letter-spacing:-0.02em">
+        <span id="q1" class="palavra will">Aceita</span> <em id="q2" class="palavra will font-normal italic">cripto?</em>
+      </h1>
+      <div class="abs" style="left:0;right:0;top:640px;text-align:center">
+        <span id="resposta" class="relative font-mono text-tinta-fraca" style="font-size:58px;letter-spacing:.01em;position:relative;display:inline-block;white-space:pre"><span id="respostaTexto"></span><span id="caret" style="display:inline-block;width:.55em;height:.95em;vertical-align:-0.12em;background:var(--color-tinta-fraca);margin-left:4px"></span><span id="risco" class="abs" style="left:-14px;right:-14px;top:52%;height:6px;background:var(--color-tinta);transform-origin:left center"></span></span>
+      </div>
+      <div id="carimbo1" class="abs will" style="left:960px;top:690px;width:0;height:0">
+        <div id="carimbo1zoom" style="position:absolute;transform:translate(-50%,-50%);zoom:6.2;white-space:nowrap"></div>
+      </div>
+    </div>
+    <div id="s1base" class="abs" style="left:0;right:0;bottom:0">
+      <div class="h-[3px] bg-tinta"></div>
+      <div class="calcada" style="zoom:2"></div>
+    </div>
+  </section>
+
+  <!-- 2 · REVELACAO (cabecalho + heroi reais) -->
+  <section class="scene" id="s2">
+    <div id="s2c" class="abs will" style="left:0;top:0;width:1920px">
+      <div style="zoom:1.7;width:1129px">
+        <div id="s2header" class="will"></div>
+        <div id="s2hero" style="padding-top:22px"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · SELO -->
+  <section class="scene" id="s3">
+    <div id="s3painel" class="abs will bg-papel-quente" style="inset:0;border-top:2px solid var(--color-regua)">
+      <div class="abs" style="left:150px;right:150px;top:160px">
+        <div id="s3olho" class="font-mono text-ocre-escuro uppercase will" style="font-size:25px;letter-spacing:.18em">II · Data de confirmação</div>
+        <h2 id="s3titulo" class="font-display" style="margin:26px 0 0;font-size:96px;line-height:1;letter-spacing:-0.015em;white-space:nowrap">Cada selo diz quando foi checado.</h2>
+        <div id="s3cornija" style="margin-top:44px;transform-origin:left center">
+          <div class="h-[3px] bg-tinta" style="height:5px"></div>
+          <div class="bg-tinta" style="height:2px;margin-top:5px"></div>
+        </div>
+        <div id="s3linhas" style="margin-top:18px">
+          <div class="s3linha" style="position:relative;height:180px;border-bottom:2px solid var(--color-regua)">
+            <div class="s3selo abs" style="left:0;top:90px;width:0;height:0"><div class="s3seloz" style="position:absolute;top:-50%;zoom:3.6;transform:translateY(-50%);white-space:nowrap" data-frag="seloVerificado"></div></div>
+            <div class="s3legenda abs text-tinta-media" style="left:1000px;top:63px;font-size:40px;font-weight:500">confirmado pela equipe</div>
+          </div>
+          <div class="s3linha" style="position:relative;height:180px;border-bottom:2px solid var(--color-regua)">
+            <div class="s3selo abs" style="left:0;top:90px;width:0;height:0"><div class="s3seloz" style="position:absolute;top:-50%;zoom:3.6;transform:translateY(-50%);white-space:nowrap" data-frag="seloComunidade"></div></div>
+            <div class="s3legenda abs text-tinta-media" style="left:1000px;top:63px;font-size:40px;font-weight:500">indicado pela comunidade</div>
+          </div>
+          <div class="s3linha" style="position:relative;height:180px">
+            <div class="s3selo abs" style="left:0;top:90px;width:0;height:0"><div class="s3seloz" style="position:absolute;top:-50%;zoom:3.6;transform:translateY(-50%);white-space:nowrap" data-frag="seloVencido"></div></div>
+            <div class="s3legenda abs text-tinta-media" style="left:1000px;top:63px;font-size:40px;font-weight:500">mais de um ano: checar de novo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · INDICAR -->
+  <section class="scene" id="s4">
+    <div id="s4c" class="abs will" style="inset:0">
+      <div id="s4esq" class="abs" style="left:96px;top:190px;width:530px">
+        <div id="s4olho" class="font-mono text-tinta-fraca uppercase will" style="font-size:24px;letter-spacing:.2em">Como a curadoria funciona</div>
+        <div style="margin-top:48px">
+          <div class="passo will" style="position:relative;padding:22px 0 26px 34px;border-bottom:2px solid var(--color-regua)">
+            <div class="passo-barra abs bg-verde" style="left:0;top:22px;bottom:26px;width:8px;transform-origin:top"></div>
+            <div class="font-mono text-ocre-escuro" style="font-size:24px;letter-spacing:.16em">№ 01</div>
+            <div class="font-display" style="font-size:46px;line-height:1.08;margin-top:10px;font-weight:600">A comunidade indica</div>
+          </div>
+          <div class="passo will" style="position:relative;padding:22px 0 26px 34px;border-bottom:2px solid var(--color-regua)">
+            <div class="passo-barra abs bg-verde" style="left:0;top:22px;bottom:26px;width:8px;transform-origin:top"></div>
+            <div class="font-mono text-ocre-escuro" style="font-size:24px;letter-spacing:.16em">№ 02</div>
+            <div class="font-display" style="font-size:46px;line-height:1.08;margin-top:10px;font-weight:600">A equipe confirma</div>
+          </div>
+          <div class="passo will" style="position:relative;padding:22px 0 26px 34px">
+            <div class="passo-barra abs bg-verde" style="left:0;top:22px;bottom:26px;width:8px;transform-origin:top"></div>
+            <div class="font-mono text-ocre-escuro" style="font-size:24px;letter-spacing:.16em">№ 03</div>
+            <div class="font-display" style="font-size:46px;line-height:1.08;margin-top:10px;font-weight:600">O selo é publicado</div>
+            <div id="s4selo" class="abs will" style="left:34px;top:166px;width:0;height:0"><div style="position:absolute;transform:translateY(-50%);zoom:2.6;white-space:nowrap" data-frag="seloVerificado"></div></div>
+          </div>
+        </div>
+      </div>
+      <div id="s4janela" class="abs" style="left:650px;top:0;width:1200px;height:1080px;overflow:hidden">
+        <div id="s4camera" class="will" style="position:absolute;left:0;top:70px;width:1200px">
+          <div id="s4fichas" style="zoom:1.9;position:relative;width:624px;height:1100px"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · FECHO (EstufaCta real) -->
+  <section class="scene" id="s5">
+    <div id="s5c" class="abs will" style="left:0;top:0;width:1920px;height:1080px">
+      <div style="zoom:1.7;width:1129px" id="s5zoom">
+        <div id="s5estufa"></div>
+      </div>
+      <div id="s5marca" class="abs will" style="left:0;right:0;top:985px;display:flex;justify-content:center;align-items:center;gap:22px">
+        <img src="marca.svg" width="54" height="54" style="border-radius:5px;display:block" alt="">
+        <span class="font-display" style="font-size:42px;font-weight:600;letter-spacing:-0.01em">CriptoCuritiba</span>
+        <span class="text-regua" style="font-size:40px">·</span>
+        <span class="font-mono text-tinta-media" style="font-size:31px;letter-spacing:.02em">criptocuritiba-web-one.vercel.app</span>
+      </div>
+    </div>
+  </section>
+
+  <svg id="cursor" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 2 L3 19.5 L7.6 15.4 L10.6 22 L13.6 20.7 L10.7 14.2 L16.8 14.2 Z" fill="#1b1a16" stroke="#fbf8f1" stroke-width="1.4" stroke-linejoin="round"/></svg>
+  <div id="ripple"></div>
+</div>
+
+<script>
+window.FRAG = /*FRAGMENTS*/null;
+</script>
+<script src="anim.js"></script>
+</body>
+</html>

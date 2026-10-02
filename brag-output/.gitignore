@@ -1,0 +1,12 @@
+# Intermediarios do /brag: tudo aqui e regenerado pelos scripts de work/.
+work/stills/
+work/fonts/
+work/mudo.mp4
+work/trilha.wav
+work/site.css
+work/stage.html
+work/fragments.html
+work/fragments.json
+work/render.cjs
+work/debug.mjs
+work/marca.svg
