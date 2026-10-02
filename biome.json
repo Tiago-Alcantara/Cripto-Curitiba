@@ -12,6 +12,7 @@
       "!**/.next",
       "!**/dist",
       "!**/generated",
+      "!**/brag-output-*/composition",
       "!**/globals.css",
       "!**/next-env.d.ts"
     ]

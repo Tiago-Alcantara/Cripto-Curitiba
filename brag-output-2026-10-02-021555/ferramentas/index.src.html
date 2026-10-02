@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Cripto Curitiba · brag</title>
+    <link rel="stylesheet" href="assets/site.css" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /*FONTFACE*/
+      /* familias de sistema que sobram nas pilhas padrao do Tailwind: so declaradas, nunca usadas */
+      @font-face { font-family: 'Apple Color Emoji'; src: local('Apple Color Emoji'); }
+      @font-face { font-family: 'Segoe UI Emoji'; src: local('Segoe UI Emoji'); }
+      @font-face { font-family: 'Segoe UI Symbol'; src: local('Segoe UI Symbol'); }
+      @font-face { font-family: 'SFMono-Regular'; src: local('SFMono-Regular'); }
+      :root {
+        --font-archivo: 'Archivo';
+        --font-bodoni: 'Bodoni Moda';
+        --font-jetbrains: 'JetBrains Mono';
+      }
+      /* sem transicoes CSS: so a timeline move as coisas */
+      *, *::before, *::after { animation: none; transition: none; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #efe9dd; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #efe9dd; font-family: 'Archivo', sans-serif; }
+      .clip { position: absolute; inset: 0; }
+      .abs { position: absolute; }
+      .palavra { display: inline-block; }
+      .ficha-estado { position: absolute; left: 0; top: 0; width: 624px; }
+      #cursor-camada { pointer-events: none; z-index: 50; }
+      #cursor { position: absolute; left: 0; top: 0; width: 46px; height: 46px; display: block; }
+      #ripple { position: absolute; left: 0; top: 0; width: 70px; height: 70px; border: 3px solid #c9902c; border-radius: 50%; opacity: 0; }
+      .pino { position: absolute; width: 15px; height: 15px; }
+      .pino > .pinhao { width: 15px; height: 15px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="20.5" data-width="1920" data-height="1080" data-fps="30">
+
+      <!-- 1 · GANCHO -->
+      <section id="s1" class="clip" data-start="0" data-duration="3.55" data-track-index="0">
+        <div id="s1c" class="abs" style="inset: 0">
+          <h1 class="font-display abs" style="left: 0; right: 0; top: 250px; margin: 0; text-align: center; font-size: 232px; line-height: 0.98; letter-spacing: -0.02em">
+            <span id="q1" class="palavra">Aceita</span> <em id="q2" class="palavra font-normal italic">cripto?</em>
+          </h1>
+          <div class="abs" style="left: 0; right: 0; top: 640px; text-align: center">
+            <span id="resposta" data-layout-allow-overlap data-layout-allow-occlusion class="font-mono text-tinta-fraca" style="font-size: 58px; letter-spacing: 0.01em; position: relative; display: inline-block; white-space: pre"><span id="resposta-texto" data-layout-allow-overlap data-layout-allow-occlusion></span><span id="caret" style="display: inline-block; width: 0.55em; height: 0.95em; vertical-align: -0.12em; background: #6a6254; margin-left: 4px"></span><span id="risco" class="abs" style="left: -14px; right: -14px; top: 52%; height: 6px; display: block; background: #1b1a16; transform-origin: left center"></span></span>
+          </div>
+          <div id="carimbo1" class="abs" style="left: 960px; top: 690px; width: 0; height: 0">
+            <div style="position: absolute; transform: translate(-50%, -50%); zoom: 6.2; white-space: nowrap">{{SELO_VERIFICADO}}</div>
+          </div>
+        </div>
+        <div id="s1base" class="abs" style="left: 0; right: 0; bottom: 0">
+          <div class="h-[3px] bg-tinta"></div>
+          <div class="calcada" style="zoom: 2"></div>
+        </div>
+      </section>
+
+      <!-- 2 · REVELACAO: cabecalho e heroi reais -->
+      <section id="s2" class="clip" data-start="3.4" data-duration="4.2" data-track-index="1">
+        <div id="s2c" class="abs" style="left: 0; top: 0; width: 1920px">
+          <div style="zoom: 1.7; width: 1129px">
+            <div id="s2header">{{HEADER}}</div>
+            <div id="s2hero" style="padding-top: 22px">{{HERO}}</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3 · SELO -->
+      <section id="s3" class="clip" data-start="7.25" data-duration="3.95" data-track-index="2">
+        <div id="s3painel" class="abs bg-papel-quente" style="inset: 0; border-top: 2px solid #c9bfa8">
+          <div class="abs" style="left: 150px; right: 150px; top: 160px">
+            <div id="s3olho" class="font-mono text-ocre-escuro uppercase" style="font-size: 25px; letter-spacing: 0.18em">II · Data de confirmação</div>
+            <h2 id="s3titulo" class="font-display" style="margin: 26px 0 0; font-size: 96px; line-height: 1; letter-spacing: -0.015em; white-space: nowrap"><span class="palavra">Cada</span> <span class="palavra">selo</span> <span class="palavra">diz</span> <span class="palavra">quando</span> <span class="palavra">foi</span> <span class="palavra">checado.</span></h2>
+            <div id="s3cornija" style="margin-top: 44px; transform-origin: left center">
+              <div class="bg-tinta" style="height: 5px"></div>
+              <div class="bg-tinta" style="height: 2px; margin-top: 5px"></div>
+            </div>
+            <div style="margin-top: 18px">
+              <div class="s3linha" style="position: relative; height: 180px">
+                <div class="s3regua abs" style="left: 0; right: 0; bottom: 0; height: 2px; background: #c9bfa8; transform-origin: left center"></div>
+                <div class="s3selo abs" style="left: 0; top: 90px; width: 0; height: 0"><div style="position: absolute; top: -50%; zoom: 3.6; transform: translateY(-50%); white-space: nowrap">{{SELO_VERIFICADO}}</div></div>
+                <div class="s3legenda abs text-tinta-media" style="left: 1000px; top: 63px; font-size: 40px; font-weight: 500">confirmado pela equipe</div>
+              </div>
+              <div class="s3linha" style="position: relative; height: 180px">
+                <div class="s3regua abs" style="left: 0; right: 0; bottom: 0; height: 2px; background: #c9bfa8; transform-origin: left center"></div>
+                <div class="s3selo abs" style="left: 0; top: 90px; width: 0; height: 0"><div style="position: absolute; top: -50%; zoom: 3.6; transform: translateY(-50%); white-space: nowrap">{{SELO_COMUNIDADE}}</div></div>
+                <div class="s3legenda abs text-tinta-media" style="left: 1000px; top: 63px; font-size: 40px; font-weight: 500">indicado pela comunidade</div>
+              </div>
+              <div class="s3linha" style="position: relative; height: 180px">
+                <div class="s3selo abs" style="left: 0; top: 90px; width: 0; height: 0"><div style="position: absolute; top: -50%; zoom: 3.6; transform: translateY(-50%); white-space: nowrap">{{SELO_VENCIDO}}</div></div>
+                <div class="s3legenda abs text-tinta-media" style="left: 1000px; top: 63px; font-size: 40px; font-weight: 500">mais de um ano: checar de novo</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 · INDICAR: os estados reais da FichaIndicacao -->
+      <section id="s4" class="clip" data-start="10.95" data-duration="5.1" data-track-index="3">
+        <div id="s4c" class="abs" style="inset: 0">
+          <div id="s4esq" class="abs" style="left: 96px; top: 190px; width: 530px">
+            <div id="s4olho" class="font-mono text-tinta-fraca uppercase" style="font-size: 24px; letter-spacing: 0.2em">Como a curadoria funciona</div>
+            <div style="margin-top: 48px">
+              <div class="passo" style="position: relative; padding: 22px 0 26px 34px; border-bottom: 2px solid #c9bfa8">
+                <div class="passo-barra abs bg-verde" style="left: 0; top: 22px; bottom: 26px; width: 8px; transform-origin: top"></div>
+                <div class="passo-num font-mono text-ocre-escuro" style="font-size: 24px; letter-spacing: 0.16em">№ 01</div>
+                <div class="passo-titulo font-display" style="font-size: 46px; line-height: 1.08; margin-top: 10px; font-weight: 600">A comunidade indica</div>
+              </div>
+              <div class="passo" style="position: relative; padding: 22px 0 26px 34px; border-bottom: 2px solid #c9bfa8">
+                <div class="passo-barra abs bg-verde" style="left: 0; top: 22px; bottom: 26px; width: 8px; transform-origin: top"></div>
+                <div class="passo-num font-mono text-ocre-escuro" style="font-size: 24px; letter-spacing: 0.16em">№ 02</div>
+                <div class="passo-titulo font-display" style="font-size: 46px; line-height: 1.08; margin-top: 10px; font-weight: 600">A equipe confirma</div>
+              </div>
+              <div class="passo" style="position: relative; padding: 22px 0 26px 34px">
+                <div class="passo-barra abs bg-verde" style="left: 0; top: 22px; bottom: 26px; width: 8px; transform-origin: top"></div>
+                <div class="passo-num font-mono text-ocre-escuro" style="font-size: 24px; letter-spacing: 0.16em">№ 03</div>
+                <div class="passo-titulo font-display" style="font-size: 46px; line-height: 1.08; margin-top: 10px; font-weight: 600">O selo é publicado</div>
+                <div id="s4selo" class="abs" style="left: 34px; top: 166px; width: 0; height: 0"><div style="position: absolute; transform: translateY(-50%); zoom: 2.6; white-space: nowrap">{{SELO_VERIFICADO}}</div></div>
+              </div>
+            </div>
+          </div>
+          <div id="s4janela" class="abs" style="left: 650px; top: 0; width: 1200px; height: 1080px; overflow: hidden" data-layout-allow-overflow>
+            <div id="s4camera" style="position: absolute; left: 0; top: 70px; width: 1200px">
+              <div id="s4fichas" style="zoom: 1.9; position: relative; width: 624px; height: 1100px">{{FICHAS}}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 · FECHO: EstufaCta real -->
+      <section id="s5" class="clip" data-start="15.95" data-duration="4.55" data-track-index="4">
+        <div id="s5c" class="abs" style="left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 50% 45%">
+          <div style="zoom: 1.7; width: 1129px">
+            <div id="s5estufa">{{ESTUFA}}</div>
+          </div>
+          <div id="s5marca" class="abs" style="left: 0; right: 0; top: {{MARCA_TOP}}px; display: flex; justify-content: center; align-items: center; gap: 22px">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="54" height="54" style="display:block" aria-hidden="true">
+  <rect width="64" height="64" rx="16" fill="#0f6b4f"/>
+  <circle cx="32" cy="27" r="14" fill="#f4efe6"/>
+  <polygon points="32,53 19.5,38 44.5,38" fill="#f4efe6"/>
+  <circle cx="32" cy="26" r="6" fill="#d9a441"/>
+</svg>
+            <span class="font-display" style="font-size: 42px; font-weight: 600; letter-spacing: -0.01em">CriptoCuritiba</span>
+            <span class="text-tinta-fraca" style="font-size: 40px">·</span>
+            <span class="font-mono text-tinta-media" style="font-size: 31px; letter-spacing: 0.02em">criptocuritiba-web-one.vercel.app</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- cursor da ficha -->
+      <div id="cursor-camada" class="clip" data-start="11.3" data-duration="3.02" data-track-index="5" data-layout-ignore>
+        <div id="ripple"></div>
+        <svg id="cursor" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 2 L3 19.5 L7.6 15.4 L10.6 22 L13.6 20.7 L10.7 14.2 L16.8 14.2 Z" fill="#1b1a16" stroke="#fbf8f1" stroke-width="1.4" stroke-linejoin="round" /></svg>
+      </div>
+
+      <!-- trilha propria (sem efeitos embutidos) -->
+      <!-- biome-ignore lint/a11y/useMediaCaption: trilha instrumental, sem fala -->
+      <audio id="musica" src="assets/music/trilha-musica.wav" data-start="0" data-duration="20.5" data-track-index="10" data-volume="0.42"></audio>
+      {{SFX}}
+    </div>
+
+    <script>
+      const AUDIO = /*AUDIO_DATA*/ null;
+      // medidas do layout da ficha em 1.9x (camera em 0), ver ferramentas/medir.mjs
+      const ALVO = /*ALVOS*/ null;
+      const DUR = 20.5;
+      const $ = (s, r = document) => r.querySelector(s);
+      const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+      const tl = gsap.timeline({ paused: true });
+
+      // ---------- 1 · gancho ----------
+      tl.fromTo('#q1', { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.38, ease: 'power3.out' }, 0.1);
+      tl.fromTo('#q2', { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.38, ease: 'power3.out' }, 0.28);
+      tl.fromTo('#resposta', { opacity: 0 }, { opacity: 1, duration: 0.05 }, 0.75);
+      tl.fromTo('#risco', { scaleX: 0 }, { scaleX: 1, duration: 0.15, ease: 'power3.out' }, 1.75);
+      tl.to('#resposta', { opacity: 0.4, duration: 0.2 }, 1.75);
+      // beat-locked: 2.02s (strongCue) — carimbo bate no tempo forte
+      tl.fromTo('#carimbo1', { opacity: 0, scale: 1.9, rotation: -6 }, { opacity: 1, scale: 1, rotation: -6, duration: 0.09, ease: 'power2.in' }, 2.0);
+      tl.to('#carimbo1', { scale: 0.965, duration: 0.07, ease: 'power1.out', yoyo: true, repeat: 1 }, 2.09);
+      tl.fromTo('#s1c', { x: 0 }, { keyframes: { x: [7, -6, 4, -3, 2, 0] }, duration: 0.22, ease: 'none' }, 2.08);
+      tl.to('#s1c', { opacity: 0, y: -70, duration: 0.28, ease: 'power3.in' }, 3.22);
+      tl.to('#s1base', { opacity: 0, duration: 0.28 }, 3.22);
+
+      // ---------- 2 · revelacao ----------
+      const header = $('#s2header header');
+      const calcadaHeader = $('.calcada', header);
+      const heroTexto = $('#s2hero section').children[0];
+      const [olho, , paragrafo, botoes] = heroTexto.children;
+      const palavras = $$('#s2hero h1 .palavra');
+      const portal = $('#s2hero figure');
+      const [torreE, vaoE, pilarE, arco, pilarD, vaoD, torreD] = portal.children[0].children;
+      const baseBarra = portal.children[1];
+      const legendaPortal = portal.children[2];
+      const pinos = $$('#s2hero .pino');
+      const gradeArco = $('.grade-creme', arco);
+
+      tl.fromTo(header, { y: -140 }, { y: 0, duration: 0.36, ease: 'power3.out' }, 3.42);
+      tl.fromTo(calcadaHeader, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.47, ease: 'power3.inOut' }, 3.58);
+      tl.fromTo(olho, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.32, ease: 'power3.out' }, 3.78);
+      // beat-grid: titulo entra no tempo 4.02s, palavras a cada 0.06s
+      tl.fromTo(palavras, { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.36, ease: 'power3.out', stagger: 0.06 }, 4.0);
+      tl.fromTo(paragrafo, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, 4.42);
+      tl.fromTo(botoes.children, { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: 0.32, ease: 'back.out(1.6)', stagger: 0.08 }, 4.6);
+      tl.fromTo(baseBarra, { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: 'power3.out' }, 3.9);
+      const sobe = (els, t0, d) => tl.fromTo(els, { scaleY: 0, transformOrigin: '50% 100%' }, { scaleY: 1, duration: d, ease: 'power3.out' }, t0);
+      sobe([torreE, torreD], 4.05, 0.4);
+      sobe([vaoE, vaoD], 4.14, 0.38);
+      sobe([pilarE, pilarD], 4.2, 0.3);
+      sobe(arco, 4.24, 0.48);
+      tl.fromTo(gradeArco, { opacity: 0 }, { opacity: 1, duration: 0.35 }, 4.55);
+      // beat-grid: pinhoes pousam em 5.02 / 5.51 / 6.01
+      pinos.forEach((pino, i) => {
+        const pouso = 5.0 + i * 0.5;
+        tl.fromTo(pino, { opacity: 0, y: -170 }, { opacity: 1, y: 0, duration: 0.26, ease: 'power2.in' }, pouso - 0.26);
+        tl.to(pino, { y: -16, duration: 0.13, ease: 'power2.out', yoyo: true, repeat: 1 }, pouso);
+      });
+      tl.fromTo(legendaPortal, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3 }, 4.9);
+      tl.to('#s2c', { y: -60, duration: 0.3, ease: 'power3.inOut' }, 7.25);
+
+      // ---------- 3 · selo ----------
+      tl.fromTo('#s3painel', { y: 1080 }, { y: 0, duration: 0.3, ease: 'power3.inOut' }, 7.25);
+      tl.fromTo('#s3olho', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.3, ease: 'power3.out' }, 7.58);
+      tl.fromTo('#s3titulo .palavra', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.34, ease: 'power3.out', stagger: 0.05 }, 7.65);
+      tl.fromTo('#s3cornija', { scaleX: 0 }, { scaleX: 1, duration: 0.33, ease: 'power3.out' }, 7.72);
+      // beat-grid: selos em 8.01 / 8.51 / 9.02; o conjunto fica inteiro na tela ate 10.72
+      $$('.s3linha').forEach((linha, i) => {
+        const pouso = 8.0 + i * 0.5;
+        const rot = [-3, 2, -1.5][i];
+        tl.fromTo($('.s3selo', linha), { opacity: 0, scale: 1.7, rotation: rot }, { opacity: 1, scale: 1, rotation: rot, duration: 0.09, ease: 'power2.in' }, pouso - 0.09);
+        tl.to($('.s3selo', linha), { scale: 0.97, duration: 0.07, yoyo: true, repeat: 1 }, pouso);
+        tl.fromTo($('.s3legenda', linha), { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.3, ease: 'power3.out' }, pouso + 0.06);
+        const regua = $('.s3regua', linha);
+        if (regua) tl.fromTo(regua, { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: 'power3.out' }, pouso - 0.1);
+        tl.to(linha, { opacity: 0, y: -24 * (1 + i * 0.3), duration: 0.23, ease: 'power3.in' }, 10.72);
+      });
+      tl.to(['#s3olho', '#s3titulo', '#s3cornija'], { opacity: 0, duration: 0.23, ease: 'power3.in' }, 10.72);
+      tl.to('#s3painel', { y: -1080, duration: 0.22, ease: 'power3.inOut' }, 10.95);
+
+      // ---------- 4 · indicar ----------
+      tl.fromTo('#s4olho', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.3, ease: 'power3.out' }, 11.05);
+      const passos = $$('.passo');
+      passos.forEach((passo, i) => {
+        tl.fromTo(passo, { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.35, ease: 'power3.out' }, 11.12 + i * 0.1);
+      });
+      // passo ativo: 01 ate 14.32, 02 ate 15.0, 03 dai em diante (cor, nao opacidade, pra manter contraste)
+      const INATIVO = '#8a8274';
+      const ativar = (i, t0, t1) => {
+        const barra = $('.passo-barra', passos[i]);
+        tl.fromTo(barra, { scaleY: 0 }, { scaleY: 1, duration: 0.2, ease: 'power3.out' }, t0);
+        if (t1) tl.to(barra, { scaleY: 0, duration: 0.12 }, t1);
+        const cor = [$('.passo-titulo', passos[i]), $('.passo-num', passos[i])];
+        tl.fromTo(cor[0], { color: INATIVO }, { color: '#1b1a16', duration: 0.15 }, t0);
+        tl.fromTo(cor[1], { color: INATIVO }, { color: '#8a5f14', duration: 0.15 }, t0);
+        if (t1) {
+          tl.to(cor[0], { color: INATIVO, duration: 0.15 }, t1);
+          tl.to(cor[1], { color: INATIVO, duration: 0.15 }, t1);
+        }
+      };
+      ativar(0, 11.4, 14.32);
+      ativar(1, 14.32, 15.0);
+      ativar(2, 15.0, null);
+      tl.fromTo('#s4selo', { opacity: 0, scale: 1.8, rotation: -3 }, { opacity: 1, scale: 1, rotation: -3, duration: 0.09, ease: 'power2.in' }, 15.0);
+      tl.to('#s4selo', { scale: 0.96, duration: 0.065, yoyo: true, repeat: 1 }, 15.09);
+
+      // camera da ficha: entra, desce ate os chips, desce ate o botao
+      tl.fromTo('#s4camera', { opacity: 0, x: 90, y: 0 }, { opacity: 1, x: 0, duration: 0.4, ease: 'power3.out' }, 11.02);
+      tl.to('#s4camera', { y: ALVO.cam1, duration: 0.4, ease: 'power3.inOut' }, 12.8);
+      tl.to('#s4camera', { y: ALVO.cam2, duration: 0.27, ease: 'power3.inOut' }, 13.68);
+      tl.to('#s4camera', { opacity: 0, duration: 0.12 }, 14.2);
+      // ficha recebida: centralizada
+      const yRecebida = (1080 - ALVO.alturaRecebida) / 2 - 70;
+      tl.fromTo('#s4camera', { opacity: 0, y: yRecebida + 30, scale: 0.97 }, { opacity: 1, y: yRecebida, scale: 1, duration: 0.25, ease: 'power3.out', immediateRender: false }, 14.32);
+      tl.to('#s4c', { opacity: 0, y: -40, duration: 0.26, ease: 'power3.in' }, 15.72);
+
+      // cursor: caminho em coordenadas do quadro
+      const C = ALVO;
+      const off = (p, cam) => ({ x: p.x, y: p.y + cam });
+      const caminho = [
+        [11.3, { x: 1760, y: 1040 }],
+        [11.48, C.nome],
+        [12.15, C.nome],
+        [12.25, C.ramo],
+        [12.4, C.ramo],
+        [12.5, C.bairro],
+        [12.8, C.bairro],
+        [13.33, off(C.btc, C.cam1)],
+        [13.4, off(C.btc, C.cam1)],
+        [13.58, off(C.ln, C.cam1)],
+        [13.68, off(C.ln, C.cam1)],
+        [14.03, off(C.enviar, C.cam2)],
+      ];
+      tl.set('#cursor', { x: caminho[0][1].x - 6, y: caminho[0][1].y - 4, transformOrigin: '6px 4px' }, 11.3);
+      for (let i = 1; i < caminho.length; i++) {
+        const [ta, a] = caminho[i - 1];
+        const [tb, b] = caminho[i];
+        if (a.x === b.x && a.y === b.y) continue;
+        tl.to('#cursor', { x: b.x - 6, y: b.y - 4, duration: tb - ta, ease: 'power2.inOut' }, ta);
+      }
+      tl.fromTo('#cursor', { opacity: 0 }, { opacity: 1, duration: 0.1 }, 11.3);
+      tl.to('#cursor', { opacity: 0, duration: 0.14 }, 14.16);
+      const cliques = [
+        [11.5, C.nome],
+        [12.25, C.ramo],
+        [12.5, C.bairro],
+        [13.35, off(C.btc, C.cam1)],
+        [13.6, off(C.ln, C.cam1)],
+        [14.05, off(C.enviar, C.cam2)],
+      ];
+      for (const [tc, p] of cliques) {
+        tl.to('#cursor', { scale: 0.86, duration: 0.04, yoyo: true, repeat: 1 }, tc - 0.02);
+        tl.set('#ripple', { x: p.x - 35, y: p.y - 35 }, tc);
+        tl.fromTo('#ripple', { opacity: 0.9, scale: 0.3 }, { opacity: 0, scale: 1.25, duration: 0.32, ease: 'power3.out', immediateRender: false }, tc);
+      }
+
+      // ---------- 5 · fecho ----------
+      const secaoEstufa = $('#s5estufa section');
+      const svgEstufa = $('svg', secaoEstufa);
+      const tracos = $$('path, circle', svgEstufa);
+      // estrutura primeiro, a grade fina por ultimo (ordem do DOM em cada grupo)
+      const fracos = (el) => Number(el.getAttribute('opacity') || 1) < 0.5;
+      const ordem = [...tracos.filter((el) => !fracos(el)), ...tracos.filter(fracos)];
+      ordem.forEach((el, i) => {
+        tl.fromTo(el, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.42, ease: 'power2.inOut' }, 16.0 + (i / (ordem.length - 1)) * 1.0);
+      });
+      const regraVerde = svgEstufa.nextElementSibling;
+      const caixaCta = regraVerde.nextElementSibling;
+      const faixaCta = caixaCta.nextElementSibling;
+      const ornamentos = faixaCta.nextElementSibling;
+      const [ctaTexto, ctaBotao] = caixaCta.children;
+      const [ctaP1, ctaP2] = ctaTexto.children;
+      tl.fromTo(regraVerde, { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: 'power3.out' }, 16.85);
+      tl.fromTo(caixaCta, { clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)', duration: 0.34, ease: 'power3.out' }, 16.98);
+      tl.fromTo(faixaCta, { scaleX: 0 }, { scaleX: 1, duration: 0.34, ease: 'power3.out' }, 16.98);
+      tl.fromTo(ctaP1, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.34, ease: 'power3.out' }, 17.14);
+      tl.fromTo(ctaP2, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.34, ease: 'power3.out' }, 17.3);
+      tl.fromTo(ctaBotao, { opacity: 0, scale: 0.84 }, { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.6)' }, 17.46);
+      // beat-locked: 18.02s (strongCue) — ornamento central acende no acorde final
+      [...ornamentos.children].forEach((o, i) => {
+        const t0 = [18.2, 18.1, 18.0, 18.1, 18.2][i];
+        tl.fromTo(o, { opacity: 0, scale: 0.2 }, { opacity: 1, scale: 1, duration: 0.22, ease: 'back.out(1.8)' }, t0);
+      });
+      tl.fromTo('#s5marca', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, 18.3);
+      tl.fromTo('#s5c', { scale: 1 }, { scale: 1.018, duration: 4.5, ease: 'power1.inOut' }, 16.0);
+
+      // ---------- estados discretos + audio-reativo, funcao pura do tempo ----------
+      const RESPOSTA = '— acho que sim…';
+      const resposta = $('#resposta-texto');
+      const caret = $('#caret');
+      const ESTADOS = ['fichaVazia', 'fichaPreenchida', 'fichaBtc', 'fichaBtcLn', 'fichaEnviando', 'fichaRecebida'];
+      const fichas = Object.fromEntries(ESTADOS.map((n) => [n, $(`.ficha-estado[data-estado="${n}"]`)]));
+      const campo = (nome, id) => $(`[data-id="${id}"]`, fichas[nome]);
+      const parte = (texto, t, a, b) => texto.slice(0, Math.round(texto.length * Math.min(1, Math.max(0, (t - a) / (b - a)))));
+      const ctaCaixa = caixaCta;
+      const relogio = { t: 0 };
+      const aplicar = () => {
+        const t = relogio.t;
+        resposta.textContent = parte(RESPOSTA, t, 0.9, 1.5);
+        caret.style.opacity = t > 0.75 && t < 1.7 && (t < 1.5 || Math.floor(t * 4) % 2 === 0) ? 1 : 0;
+
+        let estado = 'fichaVazia';
+        if (t >= 12.55) estado = 'fichaPreenchida';
+        if (t >= 13.35) estado = 'fichaBtc';
+        if (t >= 13.6) estado = 'fichaBtcLn';
+        if (t >= 14.05) estado = 'fichaEnviando';
+        if (t >= 14.32) estado = 'fichaRecebida';
+        for (const n of ESTADOS) fichas[n].style.opacity = n === estado ? 1 : 0;
+        campo('fichaVazia', 'indicar-nome').value = parte('Café das Araucárias', t, 11.55, 12.15);
+        campo('fichaVazia', 'indicar-ramo').value = t >= 12.33 ? 'cafe' : '';
+        campo('fichaPreenchida', 'indicar-bairro').value = parte('Batel', t, 12.5, 12.75) || 'B';
+        const foco = (el, on) => { el.style.borderBottomColor = on ? '#0f6b4f' : ''; };
+        foco(campo('fichaVazia', 'indicar-nome'), t >= 11.5 && t < 12.25);
+        foco(campo('fichaVazia', 'indicar-ramo'), t >= 12.25 && t < 12.5);
+        foco(campo('fichaPreenchida', 'indicar-bairro'), t >= 12.5 && t < 13.35);
+
+        // audio-reativo (sutil): o grave da trilha faz a grade do arco e a faixa verde do CTA respirarem
+        const quadro = AUDIO.frames[Math.min(AUDIO.frames.length - 1, Math.max(0, Math.round(t * AUDIO.fps)))];
+        const grave = (quadro.bands[0] + quadro.bands[1]) / 2;
+        gradeArco.style.filter = `brightness(${(1 + grave * 0.9).toFixed(3)})`;
+        ctaCaixa.style.filter = `brightness(${(1 + grave * 0.08).toFixed(3)})`;
+      };
+      tl.fromTo(relogio, { t: 0 }, { t: DUR, duration: DUR, ease: 'none', onUpdate: aplicar, immediateRender: true }, 0);
+      aplicar();
+
+      window.__timelines.main = tl;
+    </script>
+  </body>
+</html>

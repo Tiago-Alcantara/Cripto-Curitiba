@@ -4,6 +4,7 @@ Os tempos dos efeitos sao os mesmos do anim.js (carimbos, cliques, digitacao,
 pinhoes, sucesso, acorde final), e cada efeito afinado fica na tonalidade.
 """
 
+import os
 import wave
 
 import numpy as np
@@ -247,7 +248,9 @@ for t0, nota in [(18.1, 'A6'), (18.2, 'C7')]:
 musica = filtro(musica.T, 'high', 38).T
 efeitos = filtro(efeitos.T, 'high', 60).T
 # efeitos por baixo da musica e no mesmo espaco: um pouco de reverb curto compartilhado
-mix = musica * 0.9 + efeitos * 0.75
+# SO_MUSICA=1: so a trilha, sem os efeitos (a versao Hyperframes poe os SFX como clips proprios)
+SO_MUSICA = os.environ.get('SO_MUSICA') == '1'
+mix = musica * 0.9 + (0 if SO_MUSICA else efeitos * 0.75)
 
 
 def reverb(x, tamanho=0.9, mistura=0.14):
@@ -273,9 +276,10 @@ mix = np.tanh(mix * 1.1) / np.tanh(1.1)
 mix *= 0.89 / np.max(np.abs(mix))
 
 pcm = (mix * 32767).astype(np.int16)
-with wave.open('trilha.wav', 'wb') as w:
+SAIDA = os.environ.get('SAIDA', 'trilha-musica.wav' if SO_MUSICA else 'trilha.wav')
+with wave.open(SAIDA, 'wb') as w:
     w.setnchannels(2)
     w.setsampwidth(2)
     w.setframerate(SR)
     w.writeframes(pcm.tobytes())
-print('trilha.wav', DUR, 's')
+print(SAIDA, DUR, 's')
